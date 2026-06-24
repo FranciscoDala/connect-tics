@@ -721,14 +721,6 @@
 
 
 
-
-
-/* ===== CARROSSEL CENTRALIZADO - CARD VEM PRA FRENTE SEM SUBIR ===== */
-html, body {
-  -overflow-x: hidden;
-  -overflow-y: auto;
-}
-
 .events-carousel {
   padding: 120px 0;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -779,7 +771,7 @@ html, body {
   gap: 0;
   padding: 20px 0;
   overflow-x: auto;
-  overflow-y: visible;
+  overflow-y: hidden; /* ALTERADO: era visible */
   scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
@@ -807,7 +799,7 @@ html, body {
 /* CARD - SEM MARGIN AUTO */
 .event-card {
   position: relative;
-  width: 100vw;
+  width: 85%; /* ALTERADO: era 100vw */
   max-width: 400px;
   height: 480px;
   flex-shrink: 0;
@@ -842,7 +834,7 @@ html, body {
 
 /* HOVER - SÓ VEM PRA FRENTE, NÃO SOBE */
 .event-card:hover {
-  transform: scale(1.02); /* só aumenta um pouco, sem translateY */
+  transform: scale(1.02);
   z-index: 9999;
   border: 1px solid rgba(255, 255, 255, 0.6);
   -box-shadow: 
@@ -855,7 +847,7 @@ html, body {
 .carousel-track:has(.event-card:hover) .event-card:not(:hover) {
   opacity: 0.7;
   filter: blur(0.5px);
-  transform: scale(0.98); /* só diminui um pouco, não sai do lugar */
+  transform: scale(0.98);
 }
 
 .event-card img {
@@ -1050,15 +1042,13 @@ html, body {
 
 @media (max-width: 480px) {
 .event-card {
-    width: 92vw;
+    width: 85%; /* ALTERADO: era 92vw */
     height: 440px;
   }
 .event-card:hover {
-    transform: scale(1.02); /* ainda menos no mobile */
+    transform: scale(1.02);
   }
 }
-
-
 
 
 
