@@ -1,4 +1,5 @@
 @import url(bootstrap/bootstrap.min.css);
+@import url(icon.min.css);
 
 @font-face {
     font-family: 'myFonte-normal';
@@ -7,14 +8,30 @@
 }
 
 * {
+}
+body{
     font-family: 'myFonte-normal' !important;
     background-color: #b3b3b3 !important;
+
+}
+button{
+    font-family: 'myFonte-normal' !important;
+    font-size: 15px !important;
+}
+.fa{
+    font-size: 15px !important;
 }
 
 
+.post-list li i {
+  color: #00c6ff;
+  margin-right: 8px;
+  width: 16px;
+}
 
-
-
+.btn-post i {
+  margin-right: 6px;
+}
 
 
 
@@ -693,7 +710,7 @@ Categorias
    COLUNA ESQUERDA: IMAGEM
    ======================================== */
 .post-image-wrap {
-  flex: 0 0 145px;
+  flex: 0 0 245px;
   margin-left: -38px;
   z-index: 2;
 }
@@ -747,6 +764,7 @@ Categorias
    ======================================== */
 .post-content {
   flex: 1;
+  margin-top: 20px;
 }
 
 .post-title {
@@ -873,7 +891,9 @@ Categorias
   }
 }
 
-
+.icons{
+    background-color: transparent !important;
+}
 
 
 
