@@ -1,0 +1,1662 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>INEFOP Completo</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+<style>
+
+/*
+**********************************************************************************
+    Header Menu
+**********************************************************************************
+*/
+
+/* Topo: Logo + Login */
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px 0 20px;
+    -background: #816c6c;
+}
+
+.logo img {
+    height: 45px;
+}
+
+.btn-login {
+    background: #ff8c42;
+    color: #fff;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+/* Segunda barra: Menu + Pesquisa */
+.nav-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 15px;
+    -background: #ffffff;
+    border-bottom: 1px solid #eee;
+}
+
+.menu-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: none;
+    border: none;
+    font-size: 16px;
+    font-weight: 500;
+    color: #222;
+    cursor: pointer;
+}
+
+.hamburger {
+    font-size: 24px;
+}
+
+.search-btn {
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: #1e3a6f;
+    cursor: pointer;
+}
+
+/* Bloco de pesquisa */
+.search-block {
+    display: none;
+    background: #1e3a6f;
+    padding: 40px 20px 30px;
+    color: #fff;
+    text-align: left;
+}
+
+.search-block.show {
+    display: block;
+    animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.search-block h2 {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 25px;
+    line-height: 1.3;
+}
+
+.search-box {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 25px;
+}
+
+.search-input {
+    flex: 1;
+    padding: 16px 18px;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    outline: none;
+}
+
+.search-icon-btn {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    background: transparent;
+    color: #fff;
+    font-size: 22px;
+    cursor: pointer;
+}
+
+.suggestions {
+    text-align: left;
+    -max-width: 600px;
+    margin: 0 auto;
+}
+
+.suggestions p {
+    font-size: 14px;
+    color: #e0e0e0;
+    margin-bottom: 14px;
+    cursor: pointer;
+}
+
+.suggestions p:hover {
+    color: #fff;
+    text-decoration: underline;
+}
+
+/* ===== MENU LATERAL IGUAL AO ANTERIOR ===== */
+.overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    -background: rgba(255, 255, 255, 0.582);
+    -backdrop-filter: blur(5px);
+    z-index: 999;
+    -justify-content: center;
+    align-items: flex-start;
+    padding-top: 65px;
+    padding-left: 35px;
+}
+
+.overlay.active {
+    display: flex;
+}
+
+.menu-wrapper {
+    width: 88%;
+    max-width: 340px;
+    margin-left: -15px;
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    animation: aparecer 0.25s ease;
+}
+
+@keyframes aparecer {
+    from {
+        transform: scale(0.9);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.menu-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid #e0e0e0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.menu-title {
+    font-weight: 600;
+    color: #333;
+    font-size: 13px;
+    letter-spacing: 1.5px;
+}
+
+.close-btn {
+    font-size: 24px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #999;
+}
+
+.menu-body {
+    max-height: 70vh;
+    overflow-y: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.menu-body::-webkit-scrollbar {
+    display: none;
+}
+
+.item {
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.item-btn {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 15px 22px 15px 20px;
+    background: #fff;
+    border: none;
+    text-align: left;
+    font-size: 14px;
+    color: #333;
+    cursor: pointer;
+    text-transform: capitalize;
+}
+
+.item.active>.item-btn {
+    background: #1e3a6f;
+    color: #fff;
+    font-weight: 500;
+}
+
+.arrow {
+    font-size: 11px;
+    color: #666;
+}
+
+.item.active>.item-btn .arrow {
+    color: #fff;
+}
+
+.submenu {
+    display: none;
+    background: #fafafa;
+}
+
+.submenu.show {
+    display: block;
+}
+
+.submenu a {
+    display: block;
+    padding: 12px 20px 12px 35px;
+    text-decoration: none;
+    color: #555;
+    font-size: 13px;
+    border-bottom: 1px solid #f5f5f5;
+}
+
+.submenu a::before {
+    content: "• ";
+    color: #999;
+    margin-right: 5px;
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+    .logo img {
+        height: 38px;
+    }
+
+    .btn-login {
+        padding: 10px 22px;
+        font-size: 14px;
+    }
+}
+
+/*
+**********************************************************************************
+    Menu Desktop Horizontal - PC COM CLICK
+**********************************************************************************
+*/
+.menu-desktop {
+    display: none;
+}
+
+@media (min-width: 769px) {
+  .menu-btn {
+    display: none !important;
+  }
+  .overlay {
+    display: none !important;
+  }
+  .nav-bar {
+    justify-content: flex-start;
+    gap: 40px;
+    padding: 15px 20px;
+  }
+
+  .menu-desktop {
+    display: flex;
+    gap: 35px;
+    align-items: center;
+  }
+
+  .menu-desktop > .item {
+    position: relative;
+    border: none;
+  }
+
+  .menu-desktop .item-btn {
+    background: transparent;
+    padding: 8px 0;
+    font-size: 15px;
+    font-weight: 500;
+    color: #222;
+    text-transform: none;
+    border: none;
+    cursor: pointer;
+  }
+
+  .menu-desktop .item-btn:hover {
+    color: #1e3a6f;
+  }
+
+  .menu-desktop .arrow {
+    font-size: 10px;
+    margin-left: 6px;
+  }
+
+  .menu-desktop .submenu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: #fff;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    min-width: 230px;
+    padding: 8px 0;
+    display: none !important;
+    z-index: 1000;
+    border: 1px solid #eee;
+  }
+  
+  .menu-desktop .submenu.open {
+    display: block !important;
+  }
+
+  .menu-desktop .submenu a {
+    padding: 10px 20px;
+    border: none;
+    white-space: nowrap;
+    display: block;
+    text-decoration: none;
+    color: #555;
+    font-size: 13px;
+  }
+
+  .menu-desktop .submenu a:hover {
+    background: #f5f8ff;
+    color: #1e3a6f;
+  }
+
+  .menu-desktop .submenu .item-btn {
+    font-size: 14px;
+    padding: 10px 20px;
+    width: 100%;
+  }
+
+  .menu-desktop .submenu .submenu {
+    left: 100%;
+    top: 0;
+  }
+
+  /* ===== SUBMENU INFORMAÇÃO ORGANIZADO ===== */
+  .menu-desktop > .item:last-child .submenu {
+    min-width: 260px;
+    padding: 10px 0;
+  }
+
+  .menu-desktop > .item:last-child .submenu > .item {
+    border: none;
+    position: static;
+  }
+
+  .menu-desktop > .item:last-child .submenu > .item > .item-btn {
+    width: 100%;
+    text-align: left;
+    padding: 10px 20px;
+    font-size: 14px;
+    color: #333;
+    background: transparent;
+    border: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .menu-desktop > .item:last-child .submenu > .item > .item-btn:hover {
+    background: #f5f8ff;
+    color: #1e3a6f;
+  }
+
+  .menu-desktop > .item:last-child .submenu > .item > .item-btn .arrow {
+    font-size: 9px;
+    margin-left: 10px;
+    transition: 0.2s;
+  }
+
+  .menu-desktop > .item:last-child .submenu > .item > .submenu {
+    top: 0;
+    left: 100%;
+    margin-left: 0;
+    border-radius: 8px;
+    min-width: 260px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+    border: 1px solid #e5e7eb;
+  }
+
+  .menu-desktop > .item:last-child .submenu > .item > .submenu a {
+    padding: 10px 20px;
+    font-size: 13px;
+    color: #555;
+    display: block;
+  }
+
+  .menu-desktop > .item:last-child .submenu > .item > .submenu a:hover {
+    background: #f0f4ff;
+    color: #1e3a6f;
+    padding-left: 24px;
+  }
+
+  .menu-desktop > .item:last-child .submenu > .item > .submenu a::before {
+    content: "•";
+    color: #3b82f6;
+    margin-right: 8px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 768px) {
+  .menu-desktop {
+    display: none !important;
+  }
+  .menu-btn {
+    display: flex !important;
+  }
+}
+
+/*
+**********************************************************************************
+    Footer
+**********************************************************************************
+*/
+
+.footer {
+    background: linear-gradient(135deg, #1a2b4d 0%, #0d1a2e 100%);
+    color: #fff;
+    margin-top: 50px;
+}
+
+.footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    padding: 50px 20px;
+}
+
+.footer-col h4 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 18px;
+}
+
+.footer-col ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-col ul li {
+    font-size: 13px;
+    color: #d0d0d0;
+    margin-bottom: 5px;
+    -line-height: 1.6;
+}
+
+.footer-col ul li .icon {
+    -margin-right: 8px;
+    font-size: 14px;
+}
+
+.footer-col ul li a {
+    color: #d0d0d0;
+    text-decoration: none;
+    transition: 0.2s;
+}
+
+.footer-col ul li a:hover {
+    color: #fff;
+    text-decoration: underline;
+}
+
+.footer-col p {
+    font-size: 13px;
+    color: #b0b0b0;
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
+
+.newsletter-form input {
+    width: 100%;
+    padding: 12px 15px;
+    border: none;
+    border-radius: 6px;
+    font-size: 13px;
+    margin-bottom: 10px;
+    outline: none;
+}
+
+.newsletter-form button {
+    width: 100%;
+    padding: 12px;
+    background: #2563eb;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.newsletter-form button:hover {
+    background: #1e4fd1;
+}
+
+.social p {
+    margin-top: 25px;
+    margin-bottom: 12px;
+    font-weight: 500;
+}
+
+.social-icons {
+    display: flex;
+    gap: 10px;
+}
+
+.icon-circle {
+    width: 32px;
+    height: 32px;
+    background: #fff;
+    color: #1a2b4d;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 14px;
+    transition: 0.2s;
+}
+
+.icon-circle:hover {
+    background: #2563eb;
+    color: #fff;
+}
+
+.footer-bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.541);
+    padding: 10px 0;
+    background: #0a1424;
+}
+
+.footer-logos {
+    max-width: 1200px;
+    margin: 0 auto 15px;
+    display: flex;
+    gap: 30px;
+    align-items: center;
+    padding: 0 20px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #aaa;
+}
+
+.copyright {
+    text-align: center;
+    font-size: 12px;
+    color: #888;
+    padding: 0 20px;
+}
+
+/* Responsivo */
+@media (max-width: 900px) {
+    .footer-container {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 30px;
+    }
+}
+
+@media (max-width: 600px) {
+    .footer-container {
+        grid-template-columns: 1fr;
+        gap: 35px;
+    }
+
+    .footer-logos {
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+}
+
+
+
+
+
+
+/* ===== CATEGORIAS DESLIZÁVEIS ===== */
+.categories-wrapper {
+  padding: 20px 0;
+  overflow: hidden;
+  background: #fff;
+  border-bottom: 1px solid #eee;
+}
+
+.categories {
+  display: flex;
+  gap: 12px;
+  padding: 0 20px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.categories::-webkit-scrollbar {
+  display: none;
+}
+
+.cat-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  background: transparent;
+  border: 1px solid  #c1c5cc; 
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.cat-item.icon {
+  font-size: 18px;
+}
+
+.cat-item:hover {
+  background: #e8f0ff;
+  border-color: #1e3a6f;
+}
+
+.cat-item.active {
+  background: #1e3a6f;
+  color: #fff;
+  border-color: #1e3a6f;
+}
+
+/* Fade nas laterais pra indicar que tem mais */
+.categories-wrapper {
+  position: relative;
+}
+
+.categories-wrapper::before,
+.categories-wrapper::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  width: 40px;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.categories-wrapper::before {
+  left: 0;
+  background: linear-gradient(to right, #fff 0%, transparent 100%);
+}
+
+.categories-wrapper::after {
+  right: 0;
+  background: linear-gradient(to left, #fff 0%, transparent 100%);
+}
+
+
+
+
+
+
+/* ===== CARROSSEL CENTRALIZADO - CARD VEM PRA FRENTE SEM SUBIR ===== */
+html, body {
+  -overflow-x: hidden;
+  -overflow-y: auto;
+}
+
+.events-carousel {
+  padding: 120px 0;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  overflow: visible;
+  position: relative;
+  width: 100%;
+}
+
+.events-carousel::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(40px);
+  -webkit-backdrop-filter: blur(40px);
+  z-index: 0;
+}
+
+.carousel-header {
+  text-align: center;
+  margin: 0 auto 30px;
+  padding: 0 20px;
+  position: relative;
+  z-index: 1;
+}
+
+.carousel-header h2 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #fff;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+
+.carousel-wrapper {
+  overflow: visible;
+  padding: 60px 0;
+  position: relative;
+  z-index: 1;
+  width: 100%;
+}
+
+/* GAP SÓ NO MOBILE/TABLET */
+.carousel-track {
+  display: flex;
+  gap: 0;
+  padding: 20px 0;
+  overflow-x: auto;
+  overflow-y: visible;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  cursor: grab;
+  width: 100%;
+  perspective: 1000px;
+}
+
+.carousel-track:active {
+  cursor: grabbing;
+}
+
+.carousel-track::-webkit-scrollbar {
+  display: none;
+}
+
+@media (max-width: 1023px) {
+.carousel-track {
+    gap: 30px;
+    padding: 0 16px;
+  }
+}
+
+/* CARD - SEM MARGIN AUTO */
+.event-card {
+  position: relative;
+  width: 100vw;
+  max-width: 400px;
+  height: 480px;
+  flex-shrink: 0;
+  scroll-snap-align: center;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: center;
+
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px) saturate(180%);
+  -webkit-backdrop-filter: blur(12px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  -box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  border-radius: 24px;
+  overflow: visible;
+  z-index: 1;
+}
+
+/* Wrapper da imagem */
+.card-image-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 24px;
+  overflow: hidden;
+  z-index: 0;
+}
+
+/* HOVER - SÓ VEM PRA FRENTE, NÃO SOBE */
+.event-card:hover {
+  transform: scale(1.02); /* só aumenta um pouco, sem translateY */
+  z-index: 9999;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  -box-shadow: 
+    0 30px 80px rgba(0, 0, 0, 0.5),
+    0 0 0 2px rgba(255, 255, 255, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+
+/* Cards vizinhos ficam atrás mas NÃO se mexem */
+.carousel-track:has(.event-card:hover) .event-card:not(:hover) {
+  opacity: 0.7;
+  filter: blur(0.5px);
+  transform: scale(0.98); /* só diminui um pouco, não sai do lugar */
+}
+
+.event-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  filter: brightness(0.85);
+}
+
+.event-card:hover img {
+  transform: scale(1.08);
+  filter: brightness(1);
+}
+
+.card-gradient {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 70%;
+  background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 100%);
+  z-index: 1;
+  border-radius: 0 0 24px 24px;
+  pointer-events: none;
+  transition: opacity 0.4s;
+}
+
+.event-card:hover .card-gradient {
+  opacity: 0.9;
+}
+
+.card-badge {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: rgba(251, 191, 36, 0.95);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #000;
+  padding: 10px 18px;
+  border-radius: 50px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  z-index: 3;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 20px rgba(251, 191, 36, 0.4);
+  transition: all 0.3s;
+}
+
+.event-card:hover .card-badge {
+  transform: scale(1.05);
+  box-shadow: 0 8px 30px rgba(251, 191, 36, 0.6);
+}
+
+.card-date {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 18px;
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 3;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s;
+}
+
+.event-card:hover .card-date {
+  transform: scale(1.05);
+}
+
+.card-date .day {
+  font-size: 26px;
+  font-weight: 700;
+  color: #1a1a1a;
+  line-height: 1;
+}
+
+.card-date .month {
+  font-size: 13px;
+  font-weight: 600;
+  color: #4b5563;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+.card-content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 28px 24px;
+  z-index: 3;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(16px) saturate(150%);
+  -webkit-backdrop-filter: blur(16px) saturate(150%);
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 0 0 24px 24px;
+  transition: all 0.3s;
+}
+
+.event-card:hover .card-content {
+  background: rgba(0, 0, 0, 0.45);
+}
+
+.card-content h3 {
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.3;
+  margin-bottom: 14px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.card-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 15px;
+  font-weight: 500;
+  opacity: 0.95;
+}
+
+.card-meta .tag {
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1.5px solid rgba(255, 255, 255, 0.35);
+  padding: 6px 14px;
+  border-radius: 50px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+.carousel-dots {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 40px;
+  position: relative;
+  z-index: 1;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(4px);
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.dot.active {
+  width: 28px;
+  border-radius: 4px;
+  background: #fff;
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.7);
+}
+
+/* Responsivo */
+@media (min-width: 768px) {
+.event-card {
+    max-width: 420px;
+    height: 500px;
+  }
+}
+
+@media (min-width: 1024px) {
+.event-card {
+    width: 320px;
+    height: 350px;
+  }
+.carousel-header h2 {
+    font-size: 34px;
+  }
+}
+
+@media (max-width: 480px) {
+.event-card {
+    width: 92vw;
+    height: 440px;
+  }
+.event-card:hover {
+    transform: scale(1.02); /* ainda menos no mobile */
+  }
+}
+
+
+
+
+
+</style>
+</head>
+
+<body>
+
+    <!-- Topo -->
+    <div class="top-bar">
+        <div class="logo">
+            <img src="assets/img/logo/connect.png" width="">
+        </div>
+        <button class="btn-login">Login</button>
+    </div>
+
+    <!-- Menu + Pesquisa -->
+    <div class="nav-bar">
+        <button class="menu-btn" onclick="abrirMenu()">
+            <span class="hamburger">☰</span>
+            <span>Menu</span>
+        </button>
+
+        <!-- Menu Horizontal Desktop - só aparece no PC -->
+        <div class="menu-desktop">
+          
+          <div class="item">
+            <button class="item-btn">Institucional <span class="arrow">▼</span></button>
+            <div class="submenu">
+              <a href="#">Quem Somos</a>
+            </div>
+          </div>
+
+          <div class="item">
+            <button class="item-btn">Notícias</button>
+          </div>
+
+          <div class="item">
+            <button class="item-btn">Publicações <span class="arrow">▼</span></button>
+            <div class="submenu">
+              <a href="#">Legislações</a>
+              <a href="#">Agenda</a>
+            </div>
+          </div>
+
+          <div class="item">
+            <button class="item-btn">Informação <span class="arrow">▼</span></button>
+            <div class="submenu">
+              <div class="item">
+                <button class="item-btn">Serviços para Empresa <span class="arrow">▶</span></button>
+                <div class="submenu"></div>
+              </div>
+              <div class="item">
+                <button class="item-btn">Serviços para Cidadão <span class="arrow">▶</span></button>
+                <div class="submenu">
+                  <a href="#">Emprego ou Estágio</a>
+                  <a href="#">Formação Profissional</a>
+                  <a href="#">Carteira Profissional</a>
+                </div>
+              </div>
+              <div class="item">
+                <button class="item-btn">Serviços de Empreendedorismo <span class="arrow">▶</span></button>
+                <div class="submenu">
+                  <a href="#">Serviços de Empreendedorismo e Inovação</a>
+                  <a href="#">Rede de Centros de Empreendedorismo</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <button class="search-btn" onclick="toggleSearch()">🔍</button>
+    </div>
+
+    <!-- Bloco de pesquisa -->
+    <div class="search-block" id="searchBlock">
+        <h2>Olá, o que pretende pesquisar?</h2>
+
+        <div class="search-box">
+            <input type="text" class="search-input" placeholder="Escreva o que procura">
+            <button class="search-icon-btn">🔍</button>
+        </div>
+
+        <div class="suggestions">
+            <p>Como fazer o registo no portal INEFOP?</p>
+            <p>Como posso candidatar-me a um emprego ou estágio através do INEFOP?</p>
+            <p>Como posso candidatar-me a um apoio do governo?</p>
+        </div>
+    </div>
+
+    <!-- Menu Lateral - só abre no tablet/celular -->
+    <div class="overlay" id="overlay" onclick="fecharMenu(event)">
+        <div class="menu-wrapper" onclick="event.stopPropagation()">
+
+            <div class="menu-header">
+                <div class="menu-title">MENU</div>
+                <button class="close-btn" onclick="fecharMenu(event)">×</button>
+            </div>
+
+            <div class="menu-body">
+
+                <div class="item">
+                    <button class="item-btn" onclick="toggle(this)">Institucional <span class="arrow">▼</span></button>
+                    <div class="submenu">
+                        <a href="#">Quem Somos</a>
+                    </div>
+                </div>
+
+                <div class="item">
+                    <button class="item-btn" onclick="toggle(this)">Notícias <span class="arrow"
+                            style="visibility:hidden">▼</span></button>
+                </div>
+
+                <div class="item">
+                    <button class="item-btn" onclick="toggle(this)">Publicações <span class="arrow">▼</span></button>
+                    <div class="submenu">
+                        <a href="#">Legislações</a>
+                        <a href="#">Agenda</a>
+                    </div>
+                </div>
+
+                <div class="item">
+                    <button class="item-btn" onclick="toggle(this)">Informaçao <span class="arrow">▼</span></button>
+                    <div class="submenu">
+
+                        <div class="item">
+                            <button class="item-btn" onclick="toggle(this)">Serviços para Empresa <span
+                                    class="arrow">▼</span></button>
+                            <div class="submenu"></div>
+                        </div>
+
+                        <div class="item active">
+                            <button class="item-btn" onclick="toggle(this)">Serviços para Cidadão <span
+                                    class="arrow">▲</span></button>
+                            <div class="submenu show">
+                                <a href="#">Emprego ou Estágio</a>
+                                <a href="#">Formação Profissional</a>
+                                <a href="#">Carteira Profissional</a>
+                            </div>
+                        </div>
+
+                        <div class="item">
+                            <button class="item-btn" onclick="toggle(this)">Serviços de Empreendedorismo <span
+                                    class="arrow">▼</span></button>
+                            <div class="submenu">
+                                <a href="#">Serviços de Empreendedorismo e Inovação</a>
+                                <a href="#">Rede de Centros de Empreendedorismo</a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+      <!-- Categorias deslizáveis -->
+      <div class="categories-wrapper">
+        <div class="categories" id="categories">
+          <button class="cat-item active">
+            <span class="icon">🎭</span>
+            Shows e Festas
+          </button>
+          <button class="cat-item">
+            <span class="icon">🎪</span>
+            Teatros e Espetáculos
+          </button>
+          <button class="cat-item">
+            <span class="icon">🎓</span>
+            Cursos e Formações
+          </button>
+          <button class="cat-item">
+            <span class="icon">💼</span>
+            Sociais e Empresariais
+          </button>
+          <button class="cat-item">
+            <span class="icon">🚌</span>
+            Excursões e Passeios
+          </button>
+          <button class="cat-item">
+            <span class="icon">⚽</span>
+            Desporto
+          </button>
+          <button class="cat-item">
+            <span class="icon">🍔</span>
+            Gastronomia
+          </button>
+        </div>
+      </div>
+
+          <br>
+          <br>
+          <br>
+
+
+
+      <section class="events-carousel">
+        <div class="carousel-header">
+          <h2>Próximos Eventos</h2>
+        </div>
+
+        <div class="carousel-wrapper">
+          <div class="carousel-track" id="carouselTrack">
+
+            <!-- CARD 1 -->
+            <div class="event-card">
+              <div class="card-image-wrapper">
+                <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=800" alt="Festival de Jazz">
+              </div>
+              <div class="card-gradient"></div>
+              <span class="card-badge">DESTAQUE</span>
+              <div class="card-date">
+                <span class="day">26</span>
+                <span class="month">JUN</span>
+              </div>
+              <div class="card-content">
+                <h3>Festival de Jazz Luanda - Noite Inesquecível</h3>
+                <div class="card-meta">
+                  <span class="tag">SHOW</span>
+                  <span>20:00H</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- CARD 2 -->
+            <div class="event-card">
+              <div class="card-image-wrapper">
+                <img src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800" alt="Show Rock">
+              </div>
+              <div class="card-gradient"></div>
+              <div class="card-date">
+                <span class="day">15</span>
+                <span class="month">JUL</span>
+              </div>
+              <div class="card-content">
+                <h3>Rock Nacional - As Guerreiras Tributo</h3>
+                <div class="card-meta">
+                  <span class="tag">SHOW</span>
+                  <span>16:00H</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- CARD 3 -->
+            <div class="event-card">
+              <div class="card-image-wrapper">
+                <img src="https://images.unsplash.com/photo-1506157786151-b8491531f063?w=800" alt="Festival">
+              </div>
+              <div class="card-gradient"></div>
+              <span class="card-badge">NOVO</span>
+              <div class="card-date">
+                <span class="day">03</span>
+                <span class="month">AGO</span>
+              </div>
+              <div class="card-content">
+                <h3>Festival de Verão - Praia do Futuro</h3>
+                <div class="card-meta">
+                  <span class="tag">FESTIVAL</span>
+                  <span>14:00H</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- CARD 4 -->
+            <div class="event-card">
+              <div class="card-image-wrapper">
+                <img src="https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=800" alt="Festa">
+              </div>
+              <div class="card-gradient"></div>
+              <div class="card-date">
+                <span class="day">20</span>
+                <span class="month">AGO</span>
+              </div>
+              <div class="card-content">
+                <h3>Festa Sunset - Margem do Rio</h3>
+                <div class="card-meta">
+                  <span class="tag">FESTA</span>
+                  <span>18:00H</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="carousel-dots" id="carouselDots"></div>
+      </section>
+
+</div>
+
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+
+    <!-- FOOTER INEFOP -->
+    <footer class="footer">
+        <div class="footer-container">
+
+            <!-- Coluna 1: Sede Administrativa -->
+            <div class="footer-col">
+                <h4>Sede Administrativa</h4>
+                <ul>
+                    <li><span class="icon"></span>Lunda-Sul, Saurimo | Rua principal do Verde B</li>
+                    <li><span class="icon"></span>connecttics25@gmail.com</li>
+                    <li><span class="icon"></span>WhatsApp: +244 930438947</li>
+                </ul>
+            </div>
+
+            <!-- Coluna 2: Âmbito Institucional -->
+            <div class="footer-col">
+                <h4>Âmbito Institucional</h4>
+                <ul>
+                    <li><a href="#">Missão, Visão e Valores</a></li>
+                    <li><a href="#">História</a></li>
+                    <li><a href="#">Estatuto Orgânico</a></li>
+                    <li><a href="#">Legislação</a></li>
+                    <li><a href="#">Termos e Condições</a></li>
+                    <li><a href="#">Políticas de Privacidade</a></li>
+                </ul>
+            </div>
+
+            <!-- Coluna 3: Serviços -->
+            <div class="footer-col">
+                <h4>Serviços</h4>
+                <ul>
+                    <li><a href="#">Portal do Emprego</a></li>
+                    <li><a href="#">Portal da Formação</a></li>
+                    <li><a href="#"onclick="toggleSearch()">Pesquisar</a></li>
+                </ul>
+            </div>
+
+            <!-- Coluna 4: Newsletter + Redes -->
+            <div class="footer-col">
+                <h4>Newsletter</h4>
+                <p>Acompanhe diariamente a nossa oferta de serviços e mantenha-se informado.</p>
+
+                <form class="newsletter-form" onsubmit="alert('Subscrito com sucesso!'); return false;">
+                    <input type="email" placeholder="Digite o seu email" required>
+                    <button type="submit">SUBSCREVER</button>
+                </form>
+
+            </div>
+
+        </div>
+
+        <!-- Logos e Copyright -->
+        <div class="footer-bottom">
+            <div class="copyright">
+                © Copyright 2026 | Empresa de Telecomuunicações e assistência técnica - CONNECT-Tics
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function toggleSearch() {
+            document.getElementById('searchBlock').classList.toggle('show');
+        }
+
+        // ===== FUNÇÕES DO MENU LATERAL - MOBILE =====
+        function abrirMenu() {
+            document.getElementById('overlay').classList.add('active');
+        }
+
+        function fecharMenu(e) {
+            if (e.target.id === 'overlay' || e.target.classList.contains('close-btn')) {
+                document.getElementById('overlay').classList.remove('active');
+            }
+        }
+
+        function toggle(btn) {
+            let submenu = btn.nextElementSibling;
+            let arrow = btn.querySelector('.arrow');
+
+            if (submenu && submenu.classList.contains('submenu')) {
+                submenu.classList.toggle('show');
+                if (arrow) {
+                    arrow.innerHTML = submenu.classList.contains('show') ? '▲' : '▼';
+                }
+            }
+        }
+
+        // ===== MENU DESKTOP COM CLICK - PC =====
+        document.addEventListener('DOMContentLoaded', function() {
+          const menuItems = document.querySelectorAll('.menu-desktop > .item > .item-btn');
+          
+          menuItems.forEach(btn => {
+            btn.addEventListener('click', function(e) {
+              e.preventDefault();
+              e.stopPropagation();
+              
+              let submenu = this.nextElementSibling;
+              
+              // Fecha todos os outros submenus
+              document.querySelectorAll('.menu-desktop .submenu.open').forEach(openSub => {
+                if(openSub !== submenu) {
+                  openSub.classList.remove('open');
+                  let openBtn = openSub.previousElementSibling;
+                  if(openBtn && openBtn.querySelector('.arrow')) {
+                    openBtn.querySelector('.arrow').innerHTML = '▼';
+                  }
+                }
+              });
+              
+              // Abre/fecha o submenu clicado
+              if(submenu && submenu.classList.contains('submenu')) {
+                submenu.classList.toggle('open');
+                let arrow = this.querySelector('.arrow');
+                if(arrow) {
+                  arrow.innerHTML = submenu.classList.contains('open') ? '▲' : '▼';
+                }
+              }
+            });
+          });
+
+          // Sub-submenus - Serviços para Cidadão, Empresa, etc
+          const subMenuItems = document.querySelectorAll('.menu-desktop .submenu > .item > .item-btn');
+          
+          subMenuItems.forEach(btn => {
+            btn.addEventListener('click', function(e) {
+              e.preventDefault();
+              e.stopPropagation();
+              
+              let submenu = this.nextElementSibling;
+              
+              // Fecha outros sub-submenus do mesmo nível
+              let parentSubmenu = this.closest('.submenu');
+              parentSubmenu.querySelectorAll('.submenu.open').forEach(openSub => {
+                if(openSub !== submenu) {
+                  openSub.classList.remove('open');
+                  let openBtn = openSub.previousElementSibling;
+                  if(openBtn && openBtn.querySelector('.arrow')) {
+                    openBtn.querySelector('.arrow').innerHTML = '▶';
+                  }
+                }
+              });
+              
+              // Abre/fecha o sub-submenu clicado
+              if(submenu && submenu.classList.contains('submenu')) {
+                submenu.classList.toggle('open');
+                let arrow = this.querySelector('.arrow');
+                if(arrow) {
+                  arrow.innerHTML = submenu.classList.contains('open') ? '▼' : '▶';
+                }
+              }
+            });
+          });
+
+          // Fecha menu ao clicar fora
+          document.addEventListener('click', function(e) {
+            if(!e.target.closest('.menu-desktop')) {
+              document.querySelectorAll('.menu-desktop .submenu.open').forEach(sub => {
+                sub.classList.remove('open');
+              });
+              document.querySelectorAll('.menu-desktop .arrow').forEach(arrow => {
+                if(arrow.innerHTML === '▲') arrow.innerHTML = '▼';
+                if(arrow.innerHTML === '▶') arrow.innerHTML = '▶';
+              });
+            }
+          });
+        });
+    </script>
+
+<script>
+const track = document.getElementById('carouselTrack');
+const dotsContainer = document.getElementById('carouselDots');
+
+let isDown = false;
+let startX;
+let scrollLeft;
+let cardWidth = 0;
+let gap = 0;
+
+const cards = track.querySelectorAll('.event-card');
+cards.forEach((_, i) => {
+  const dot = document.createElement('div');
+  dot.classList.add('dot');
+  if(i === 0) dot.classList.add('active');
+  dot.addEventListener('click', () => scrollToCard(i));
+  dotsContainer.appendChild(dot);
+});
+const dots = dotsContainer.querySelectorAll('.dot');
+
+function updateCardWidth() {
+  const card = track.querySelector('.event-card');
+  // GAP SÓ NO MOBILE/TABLET < 1024px
+  gap = window.innerWidth < 1024? 30 : 0;
+  cardWidth = card.offsetWidth + gap;
+}
+
+function scrollToCard(index) {
+  const viewportWidth = window.innerWidth;
+  const card = track.querySelector('.event-card');
+  const cardActualWidth = card.offsetWidth;
+  const scrollPos = index * cardWidth - (viewportWidth - cardActualWidth) / 2;
+  track.scrollTo({ left: scrollPos, behavior: 'smooth' });
+  updateDots(index);
+}
+
+function updateDots(activeIndex) {
+  dots.forEach((dot, i) => dot.classList.toggle('active', i === activeIndex));
+}
+
+function snapToCenter() {
+  const viewportWidth = window.innerWidth;
+  const card = track.querySelector('.event-card');
+  const cardActualWidth = card.offsetWidth;
+  const scrollPos = track.scrollLeft;
+  const cardIndex = Math.round((scrollPos + (viewportWidth - cardActualWidth) / 2) / cardWidth);
+  scrollToCard(cardIndex);
+}
+
+track.addEventListener('mousedown', (e) => {
+  isDown = true;
+  track.style.cursor = 'grabbing';
+  track.style.scrollSnapType = 'none';
+  startX = e.pageX - track.offsetLeft;
+  scrollLeft = track.scrollLeft;
+});
+
+track.addEventListener('mouseleave', () => {
+  if(isDown) {
+    isDown = false;
+    track.style.cursor = 'grab';
+    track.style.scrollSnapType = 'x mandatory';
+    snapToCenter();
+  }
+});
+
+track.addEventListener('mouseup', () => {
+  isDown = false;
+  track.style.cursor = 'grab';
+  track.style.scrollSnapType = 'x mandatory';
+  snapToCenter();
+});
+
+track.addEventListener('mousemove', (e) => {
+  if(!isDown) return;
+  e.preventDefault();
+  const x = e.pageX - track.offsetLeft;
+  const walk = x - startX;
+  track.scrollLeft = scrollLeft - walk;
+});
+
+let touchStartX = 0;
+track.addEventListener('touchstart', (e) => {
+  touchStartX = e.touches[0].pageX;
+  scrollLeft = track.scrollLeft;
+  track.style.scrollSnapType = 'none';
+}, {passive: true});
+
+track.addEventListener('touchmove', (e) => {
+  const touchX = e.touches[0].pageX;
+  const diff = touchStartX - touchX;
+  track.scrollLeft = scrollLeft + diff;
+}, {passive: true});
+
+track.addEventListener('touchend', () => {
+  track.style.scrollSnapType = 'x mandatory';
+  snapToCenter();
+}, {passive: true});
+
+window.addEventListener('load', () => {
+  updateCardWidth();
+  scrollToCard(0);
+});
+
+window.addEventListener('resize', () => {
+  updateCardWidth();
+  const viewportWidth = window.innerWidth;
+  const card = track.querySelector('.event-card');
+  const cardActualWidth = card.offsetWidth;
+  const activeIndex = Math.round((track.scrollLeft + (viewportWidth - cardActualWidth) / 2) / cardWidth);
+  scrollToCard(activeIndex);
+});
+</script>
+</html>
