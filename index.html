@@ -723,16 +723,29 @@
 
 
 
-/* ===== CARROSSEL CENTRALIZADO - CARD VEM PRA FRENTE SEM SUBIR ===== */
+
+
+
+
+
+
+    
+
+
+/*
+**********************************************************************************
+    Cards
+**********************************************************************************
+*/
 
 html, body {
-  overflow-x: hidden;
-  overflow-y: auto;
+  -overflow-x: hidden;
+  -overflow-y: auto;
 }
 
 .events-carousel {
   padding: 120px 0;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   overflow: visible;
   position: relative;
   width: 100%;
@@ -767,7 +780,7 @@ html, body {
 }
 
 .carousel-wrapper {
-  overflow: hidden; /* ALTERADO: era visible */
+  overflow: visible;
   padding: 60px 0;
   position: relative;
   z-index: 1;
@@ -777,16 +790,17 @@ html, body {
 /* GAP SÓ NO MOBILE/TABLET */
 .carousel-track {
   display: flex;
-  gap: 20px; /* ALTERADO: era 0 */
-  padding: 0 20px; /* ALTERADO: era 20px 0 */
+  gap: 0;
+  padding: 20px 0;
   overflow-x: auto;
-  overflow-y: hidden; /* ALTERADO: era visible */
+  overflow-y: visible;
+  scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
   cursor: grab;
   width: 100%;
-  /* REMOVIDO: scroll-snap-type + perspective */
+  perspective: 1000px;
 }
 
 .carousel-track:active {
@@ -799,168 +813,241 @@ html, body {
 
 @media (max-width: 1023px) {
 .carousel-track {
-    gap: 20px; /* ALTERADO: era 30px */
-    padding: 0 20px; /* ALTERADO: era 0 16px */
+    gap: 30px;
+    padding: 0 16px;
   }
 }
 
 /* CARD - SEM MARGIN AUTO */
 .event-card {
   position: relative;
-  width: 85vw; /* ALTERADO: era 100vw */
-  max-width: 380px; /* ALTERADO: era 400px */
+  width: 100vw;
+  max-width: 400px;
   height: 480px;
   flex-shrink: 0;
-  /* REMOVIDO: scroll-snap-align */
+  scroll-snap-align: center;
   cursor: pointer;
-  transition: all 0.2s; /* ALTERADO: era 0.4s cubic-bezier */
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   transform-origin: center;
 
   background: rgba(255, 255, 255, 0.1);
-  /* REMOVIDO: backdrop-filter pesado */
+  backdrop-filter: blur(12px) saturate(180%);
+  -webkit-backdrop-filter: blur(12px) saturate(180%);
   border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* ALTERADO: sombra leve */
-  border-radius: 16px; /* ALTERADO: era 24px */
-  overflow: hidden; /* ALTERADO: era visible */
+  -box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  border-radius: 24px;
+  overflow: visible;
   z-index: 1;
 }
 
 /* Wrapper da imagem */
 .card-image-wrapper {
-  position: relative; /* ALTERADO: era absolute */
-  width: 100%;
-  height: 240px; /* ALTURA FIXA na img */
-  border-radius: 16px 16px 0 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 24px;
   overflow: hidden;
   z-index: 0;
 }
 
-/* HOVER SIMPLES IGUAL CATEGORIAS */
+/* HOVER - SÓ VEM PRA FRENTE, NÃO SOBE */
 .event-card:hover {
-  background: rgba(255, 255, 255, 0.15);
-  border-color: rgba(255, 255, 255, 0.6);
-  transform: none; /* REMOVIDO: scale */
-  z-index: 1;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); /* sombra leve */
+  transform: scale(1.02); /* só aumenta um pouco, sem translateY */
+  z-index: 9999;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  -box-shadow: 
+    0 30px 80px rgba(0, 0, 0, 0.5),
+    0 0 0 2px rgba(255, 255, 255, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7);
 }
 
-/* REMOVIDO: .carousel-track:has(.event-card:hover) .event-card:not(:hover) */
+/* Cards vizinhos ficam atrás mas NÃO se mexem */
+.carousel-track:has(.event-card:hover) .event-card:not(:hover) {
+  opacity: 0.7;
+  filter: blur(0.5px);
+  transform: scale(0.98); /* só diminui um pouco, não sai do lugar */
+}
 
 .event-card img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  display: block; /* ALTERADO: era absolute */
-  transition: none; /* REMOVIDO: transition pesada */
-  filter: brightness(0.9);
+  position: absolute;
+  top: 0;
+  left: 0;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  filter: brightness(0.85);
 }
 
 .event-card:hover img {
+  transform: scale(1.08);
   filter: brightness(1);
 }
 
-/* REMOVIDO: card-gradient pesado */
 .card-gradient {
-  display: none;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 70%;
+  background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 100%);
+  z-index: 1;
+  border-radius: 0 0 24px 24px;
+  pointer-events: none;
+  transition: opacity 0.4s;
+}
+
+.event-card:hover .card-gradient {
+  opacity: 0.9;
 }
 
 .card-badge {
   position: absolute;
-  top: 12px;
-  left: 12px;
+  top: 20px;
+  left: 20px;
   background: rgba(251, 191, 36, 0.95);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   color: #000;
-  padding: 6px 12px;
-  border-radius: 20px;
-  font-size: 11px;
-  font-weight: 600;
+  padding: 10px 18px;
+  border-radius: 50px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
   z-index: 3;
-  border: none;
-  box-shadow: none;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 20px rgba(251, 191, 36, 0.4);
+  transition: all 0.3s;
+}
+
+.event-card:hover .card-badge {
+  transform: scale(1.05);
+  box-shadow: 0 8px 30px rgba(251, 191, 36, 0.6);
 }
 
 .card-date {
   position: absolute;
-  top: 12px;
-  right: 12px;
+  top: 20px;
+  right: 20px;
   background: rgba(255, 255, 255, 0.9);
-  border-radius: 12px;
-  padding: 8px 12px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 18px;
+  padding: 12px 16px;
   display: flex;
   flex-direction: column;
   align-items: center;
   z-index: 3;
-  border: none;
-  box-shadow: none;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s;
 }
 
-/* CARD CONTENT SIMPLES IGUAL CAT-ITEM */
+.event-card:hover .card-date {
+  transform: scale(1.05);
+}
+
+.card-date .day {
+  font-size: 26px;
+  font-weight: 700;
+  color: #1a1a1a;
+  line-height: 1;
+}
+
+.card-date .month {
+  font-size: 13px;
+  font-weight: 600;
+  color: #4b5563;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
 .card-content {
-  position: relative; /* ALTERADO: era absolute */
-  padding: 16px 20px; /* padding igual cat-item */
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 28px 24px;
   z-index: 3;
   color: #fff;
-  background: transparent;
-  border-top: none;
-  border-radius: 0;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(16px) saturate(150%);
+  -webkit-backdrop-filter: blur(16px) saturate(150%);
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 0 0 24px 24px;
+  transition: all 0.3s;
+}
+
+.event-card:hover .card-content {
+  background: rgba(0, 0, 0, 0.45);
 }
 
 .card-content h3 {
-  font-size: 16px; /* fonte menor igual cat-item */
-  font-weight: 500;
-  line-height: 1.4;
-  margin: 0 0 8px 0;
-  display: block;
-  -webkit-line-clamp: unset;
-  overflow: visible;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.3;
+  margin-bottom: 14px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .card-meta {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 13px;
+  gap: 10px;
+  font-size: 15px;
   font-weight: 500;
-  opacity: 0.9;
+  opacity: 0.95;
 }
 
 .card-meta .tag {
   background: rgba(255, 255, 255, 0.18);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  padding: 4px 10px;
-  border-radius: 20px;
-  font-size: 11px;
-  font-weight: 500;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1.5px solid rgba(255, 255, 255, 0.35);
+  padding: 6px 14px;
+  border-radius: 50px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
 }
 
 .carousel-dots {
   display: flex;
   justify-content: center;
-  gap: 8px;
-  margin-top: 30px;
+  gap: 10px;
+  margin-top: 40px;
   position: relative;
   z-index: 1;
 }
 
 .dot {
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(4px);
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.3s;
 }
 
 .dot.active {
-  width: 20px;
-  border-radius: 3px;
+  width: 28px;
+  border-radius: 4px;
   background: #fff;
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.7);
 }
 
 /* Responsivo */
 @media (min-width: 768px) {
 .event-card {
-    max-width: 400px;
+    max-width: 420px;
     height: 500px;
   }
 }
@@ -977,12 +1064,11 @@ html, body {
 
 @media (max-width: 480px) {
 .event-card {
-    width: 85vw; /* ALTERADO: era 92vw */
-    height: auto; /* ALTERADO: era 440px fixo */
-    min-height: 420px;
+    width: 92vw;
+    height: 440px;
   }
 .event-card:hover {
-    transform: none;
+    transform: scale(1.02); /* ainda menos no mobile */
   }
 }
 
