@@ -1,0 +1,12 @@
+@import url(bootstrap/bootstrap.min.css);
+
+@font-face {
+    font-family: 'myFonte-normal';
+    src: url(font/zalando/static/ZalandoSansExpanded-Light.ttf);
+    font-style: normal;
+}
+
+* {
+    font-family: 'myFonte-normal' !important;
+}
+
