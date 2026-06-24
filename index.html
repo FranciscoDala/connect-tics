@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="assets/css/main.css">
 <style>
 
+
 /*
 **********************************************************************************
     Header Menu
@@ -720,7 +721,6 @@
 
 
 
-
 .events-carousel {
   padding: 120px 0;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -758,27 +758,24 @@
 }
 
 .carousel-wrapper {
-  overflow: visible;
+  overflow: hidden; /* igual categories-wrapper */
   padding: 60px 0;
   position: relative;
   z-index: 1;
   width: 100%;
 }
 
-/* GAP SÓ NO MOBILE/TABLET */
+/* IGUALZINHO ÀS CATEGORIAS - SEM SCROLL-SNAP */
 .carousel-track {
   display: flex;
-  gap: 0;
-  padding: 20px 0;
+  gap: 20px; /* igual gap das categorias */
+  padding: 0 20px; /* igual padding das categorias */
   overflow-x: auto;
-  overflow-y: hidden; /* ALTERADO: era visible */
-  scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
   cursor: grab;
   width: 100%;
-  perspective: 1000px;
 }
 
 .carousel-track:active {
@@ -789,38 +786,28 @@
   display: none;
 }
 
-@media (max-width: 1023px) {
-.carousel-track {
-    gap: 30px;
-    padding: 0 16px;
-  }
-}
-
-/* CARD - SEM MARGIN AUTO */
+/* CARD - SEM WIDTH 100vw E SEM SCROLL-SNAP */
 .event-card {
   position: relative;
-  width: 85%; /* ALTERADO: era 100vw */
-  max-width: 400px;
+  width: 300px; /* largura fixa igual cat-item */
   height: 480px;
-  flex-shrink: 0;
-  scroll-snap-align: center;
+  flex-shrink: 0; /* igual cat-item */
   cursor: pointer;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.2s; /* transição rápida igual cat-item */
   transform-origin: center;
 
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(12px) saturate(180%);
   -webkit-backdrop-filter: blur(12px) saturate(180%);
   border: 1px solid rgba(255, 255, 255, 0.2);
-  -box-shadow: 
+  box-shadow: 
     0 8px 32px rgba(0, 0, 0, 0.12),
     inset 0 1px 0 rgba(255, 255, 255, 0.3);
   border-radius: 24px;
-  overflow: visible;
+  overflow: hidden;
   z-index: 1;
 }
 
-/* Wrapper da imagem */
 .card-image-wrapper {
   position: absolute;
   top: 0;
@@ -832,22 +819,15 @@
   z-index: 0;
 }
 
-/* HOVER - SÓ VEM PRA FRENTE, NÃO SOBE */
 .event-card:hover {
+  background: rgba(255, 255, 255, 0.15); /* hover leve igual cat-item */
+  border-color: rgba(255, 255, 255, 0.6);
   transform: scale(1.02);
-  z-index: 9999;
-  border: 1px solid rgba(255, 255, 255, 0.6);
-  -box-shadow: 
+  z-index: 10;
+  box-shadow: 
     0 30px 80px rgba(0, 0, 0, 0.5),
     0 0 0 2px rgba(255, 255, 255, 0.4),
     inset 0 1px 0 rgba(255, 255, 255, 0.7);
-}
-
-/* Cards vizinhos ficam atrás mas NÃO se mexem */
-.carousel-track:has(.event-card:hover) .event-card:not(:hover) {
-  opacity: 0.7;
-  filter: blur(0.5px);
-  transform: scale(0.98);
 }
 
 .event-card img {
@@ -879,10 +859,6 @@
   transition: opacity 0.4s;
 }
 
-.event-card:hover .card-gradient {
-  opacity: 0.9;
-}
-
 .card-badge {
   position: absolute;
   top: 20px;
@@ -900,11 +876,6 @@
   border: 1px solid rgba(255, 255, 255, 0.3);
   box-shadow: 0 4px 20px rgba(251, 191, 36, 0.4);
   transition: all 0.3s;
-}
-
-.event-card:hover .card-badge {
-  transform: scale(1.05);
-  box-shadow: 0 8px 30px rgba(251, 191, 36, 0.6);
 }
 
 .card-date {
@@ -925,25 +896,6 @@
   transition: all 0.3s;
 }
 
-.event-card:hover .card-date {
-  transform: scale(1.05);
-}
-
-.card-date .day {
-  font-size: 26px;
-  font-weight: 700;
-  color: #1a1a1a;
-  line-height: 1;
-}
-
-.card-date .month {
-  font-size: 13px;
-  font-weight: 600;
-  color: #4b5563;
-  text-transform: uppercase;
-  margin-top: 2px;
-}
-
 .card-content {
   position: absolute;
   bottom: 0;
@@ -958,10 +910,6 @@
   border-top: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 0 0 24px 24px;
   transition: all 0.3s;
-}
-
-.event-card:hover .card-content {
-  background: rgba(0, 0, 0, 0.45);
 }
 
 .card-content h3 {
@@ -1025,7 +973,7 @@
 /* Responsivo */
 @media (min-width: 768px) {
 .event-card {
-    max-width: 420px;
+    width: 320px;
     height: 500px;
   }
 }
@@ -1042,14 +990,10 @@
 
 @media (max-width: 480px) {
 .event-card {
-    width: 85%; /* ALTERADO: era 92vw */
+    width: 280px; /* largura fixa no mobile igual cat-item */
     height: 440px;
   }
-.event-card:hover {
-    transform: scale(1.02);
-  }
 }
-
 
 
 </style>
