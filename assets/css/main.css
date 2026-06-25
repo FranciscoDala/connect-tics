@@ -189,6 +189,11 @@ login
     .modal-glass h2 {
         font-size: 1.5rem;
     }
+    /* Botão Fechar */
+    .modal-close {
+        top: 25px !important;
+        right: 15px !important;
+    }
 }
 
 
