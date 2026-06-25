@@ -17,7 +17,7 @@ body {
 
 button {
     font-family: 'myFonte-normal' !important;
-    font-size: 15px !important;
+    -font-size: 15px !important;
 }
 
 .fa {
@@ -68,7 +68,7 @@ Header Menu
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 15px 15px 0 15px;
+    padding: 15px 0 0 0;
     -background: #816c6c;
 }
 
@@ -92,11 +92,13 @@ Header Menu
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 5px;
+    padding: 0;
     -background: #ffffff;
     border-bottom: 1px solid #eee;
 }
-
+button.menu-btn{
+    padding: 0 !important;
+}
 .menu-btn {
     display: flex;
     align-items: center;
@@ -110,7 +112,7 @@ Header Menu
 }
 
 .hamburger {
-    font-size: 24px;
+    font-size: 30px;
 }
 
 .search-btn {
@@ -138,7 +140,7 @@ Header Menu
     width: 100%;
     height: 100%;
     background: rgba(0, 0, 0, 0.85);
-    backdrop-filter: blur(6px);
+    backdrop-filter: blur(1px);
     align-items: center;
     justify-content: center;
 }
@@ -153,7 +155,7 @@ Header Menu
     width: 90%;
     max-width: 600px;
     border-radius: 16px;
-    padding: 40px 20px 30px;
+    padding: 70px 20px 30px;
     position: relative;
 }
 
@@ -269,7 +271,7 @@ Header Menu
 .menu-wrapper {
     width: 70%;
     max-width: 340px;
-    margin-left: -15px;
+    margin-left: -20px;
     background: #fff;
     border-radius: 12px;
     overflow: hidden;
