@@ -745,7 +745,7 @@ Cards
 
 .carousel-wrapper {
     overflow: visible;
-    padding: 60px 0;
+    padding: 0;
     position: relative;
     z-index: 1;
     width: 100%;
