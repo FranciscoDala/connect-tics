@@ -95,8 +95,8 @@ login
 /* Modal Glass Effect */
 .modal-glass {
     background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(10);
+    -webkit-backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 20px;
     padding: 40px 30px;
@@ -1130,7 +1130,7 @@ Cards
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
     border: 1.5px solid rgba(255, 255, 255, 0.35);
-    padding: 6px 14px;
+    padding: 4px 50px;
     border-radius: 50px;
     font-size: 12px;
     font-weight: 600;
