@@ -384,8 +384,6 @@ Header Menu
 /* Mobile */
 @media (max-width: 480px) {
     .nav-bar {
-        justify-content: flex-start;
-        gap: 40px;
         padding: 15px 0;
     }
     .logo img {
