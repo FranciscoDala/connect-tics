@@ -183,6 +183,8 @@ login
 /* Mobile Responsivo */
 @media (max-width: 480px) {
     .modal-glass {
+        backdrop-filter: blur(10) !important;
+        -webkit-backdrop-filter: blur(10px) !important;
         padding: 30px 20px;
     }
 
