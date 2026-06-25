@@ -13,140 +13,54 @@
 </head>
 
 <body>
+
     <!-------------------------------------------------------------------------
-    -----Logo + Login----------- 
+    -----Cointainer----------- 
     --------------------------------------------------------------------------->
-    <div class="top-bar">
-        <div class="logo">
-            <img src="assets/img/logo/connect.png" width="">
+    <div class="container">
+        
+        <!-------------------------------------------------------------------------
+        -----Logo + Login----------- 
+        --------------------------------------------------------------------------->
+        <div class="top-bar">
+            <div class="logo">
+                <img src="assets/img/logo/connect.png" width="">
+            </div>
+            <button class="btn-login">Login</button>
         </div>
-        <button class="btn-login">Login</button>
-    </div>
 
 
 
-
-
-    <!-------------------------------------------------------------------------
-    -----Menu + Pesquisa----------- 
-    --------------------------------------------------------------------------->
-    <div class="nav-bar">
-        <button class="menu-btn" onclick="abrirMenu()">
-            <span class="hamburger">☰</span>
-            <span></span>
-        </button>
 
 
         <!-------------------------------------------------------------------------
-        -----Menu Horizontal Desktop - só aparece no PC----------- 
+        -----Menu + Pesquisa----------- 
         --------------------------------------------------------------------------->
-        <div class="menu-desktop">
-
-            <div class="item">
-                <button class="item-btn">Institucional <span class="arrow">▼</span></button>
-                <div class="submenu">
-                    <a href="#">Quem Somos</a>
-                </div>
-            </div>
-
-            <div class="item">
-                <button class="item-btn">Notícias</button>
-            </div>
-
-            <div class="item">
-                <button class="item-btn">Publicações <span class="arrow">▼</span></button>
-                <div class="submenu">
-                    <a href="#">Legislações</a>
-                    <a href="#">Agenda</a>
-                </div>
-            </div>
-
-            <div class="item">
-                <button class="item-btn">Informação <span class="arrow">▼</span></button>
-                <div class="submenu">
-                    <div class="item">
-                        <button class="item-btn">Serviços para Empresa <span class="arrow">▶</span></button>
-                        <div class="submenu"></div>
-                    </div>
-                    <div class="item">
-                        <button class="item-btn">Serviços para Cidadão <span class="arrow">▶</span></button>
-                        <div class="submenu">
-                            <a href="#">Emprego ou Estágio</a>
-                            <a href="#">Formação Profissional</a>
-                            <a href="#">Carteira Profissional</a>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <button class="item-btn">Serviços de Empreendedorismo <span class="arrow">▶</span></button>
-                        <div class="submenu">
-                            <a href="#">Serviços de Empreendedorismo e Inovação</a>
-                            <a href="#">Rede de Centros de Empreendedorismo</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
+        <div class="nav-bar">
+            <button class="menu-btn" onclick="abrirMenu()">
+                <span class="hamburger">☰</span>
+                <span></span>
+            </button>
 
 
-        <!-------------------------------------------------------------------------
-        -----Botão de pesquisar----------- 
-        --------------------------------------------------------------------------->
-        <button class="search-btn" onclick="toggleSearch()">🔍</button>
-    </div>
-
-    <!-------------------------------------------------------------------------
-    -----Bloco de pesquisa - Modal----------- 
-    --------------------------------------------------------------------------->
-    <div class="search-block" id="searchBlock">
-        <span class="search-close" id="closeSearch">&times;</span>
-
-        <div class="search-wrapper">
-            <h2>Olá, o que procuras?</h2>
-
-            <div class="search-box">
-                <input type="text" class="search-input" placeholder="Escreve o que procuras?">
-                <button class="search-icon-btn">🔍</button>
-            </div>
-
-            <div class="suggestions">
-                <p>O que faço para ser cliente fiel?</p>
-                <p>Como posso candidatar-me?</p>
-            </div>
-        </div>
-    </div>
-
-
-
-
-
-    <!-------------------------------------------------------------------------
-    -----Menu Lateral - só abre no tablet/celular----------- 
-    --------------------------------------------------------------------------->
-    <div class="overlay" id="overlay" onclick="fecharMenu(event)">
-        <div class="menu-wrapper" onclick="event.stopPropagation()">
-
-            <div class="menu-header">
-                <div class="menu-title">MENU</div>
-                <button class="close-btn" onclick="fecharMenu(event)">×</button>
-            </div>
-
-            <div class="menu-body">
+            <!-------------------------------------------------------------------------
+            -----Menu Horizontal Desktop - só aparece no PC----------- 
+            --------------------------------------------------------------------------->
+            <div class="menu-desktop">
 
                 <div class="item">
-                    <button class="item-btn" onclick="toggle(this)">Institucional <span class="arrow">▼</span></button>
+                    <button class="item-btn">Institucional <span class="arrow">▼</span></button>
                     <div class="submenu">
                         <a href="#">Quem Somos</a>
                     </div>
                 </div>
 
                 <div class="item">
-                    <button class="item-btn" onclick="toggle(this)">Notícias <span class="arrow"
-                            style="visibility:hidden">▼</span></button>
+                    <button class="item-btn">Notícias</button>
                 </div>
 
                 <div class="item">
-                    <button class="item-btn" onclick="toggle(this)">Publicações <span class="arrow">▼</span></button>
+                    <button class="item-btn">Publicações <span class="arrow">▼</span></button>
                     <div class="submenu">
                         <a href="#">Legislações</a>
                         <a href="#">Agenda</a>
@@ -154,50 +68,144 @@
                 </div>
 
                 <div class="item">
-                    <button class="item-btn" onclick="toggle(this)">Informaçao <span class="arrow">▼</span></button>
+                    <button class="item-btn">Informação <span class="arrow">▼</span></button>
                     <div class="submenu">
-
                         <div class="item">
-                            <button class="item-btn" onclick="toggle(this)">Serviços para Empresa <span
-                                    class="arrow">▼</span></button>
+                            <button class="item-btn">Serviços para Empresa <span class="arrow">▶</span></button>
                             <div class="submenu"></div>
                         </div>
-
-                        <div class="item active">
-                            <button class="item-btn" onclick="toggle(this)">Serviços para Cidadão <span
-                                    class="arrow">▲</span></button>
-                            <div class="submenu show">
+                        <div class="item">
+                            <button class="item-btn">Serviços para Cidadão <span class="arrow">▶</span></button>
+                            <div class="submenu">
                                 <a href="#">Emprego ou Estágio</a>
                                 <a href="#">Formação Profissional</a>
                                 <a href="#">Carteira Profissional</a>
                             </div>
                         </div>
-
                         <div class="item">
-                            <button class="item-btn" onclick="toggle(this)">Serviços de Empreendedorismo <span
-                                    class="arrow">▼</span></button>
+                            <button class="item-btn">Serviços de Empreendedorismo <span class="arrow">▶</span></button>
                             <div class="submenu">
                                 <a href="#">Serviços de Empreendedorismo e Inovação</a>
                                 <a href="#">Rede de Centros de Empreendedorismo</a>
                             </div>
                         </div>
-
                     </div>
                 </div>
 
             </div>
+
+
+            <!-------------------------------------------------------------------------
+            -----Botão de pesquisar----------- 
+            --------------------------------------------------------------------------->
+            <button class="search-btn" onclick="toggleSearch()">🔍</button>
         </div>
-    </div>
+
+        <!-------------------------------------------------------------------------
+        -----Bloco de pesquisa - Modal----------- 
+        --------------------------------------------------------------------------->
+        <div class="search-block" id="searchBlock">
+            <span class="search-close" id="closeSearch">&times;</span>
+
+            <div class="search-wrapper">
+                <h2>Olá, o que procuras?</h2>
+
+                <div class="search-box">
+                    <input type="text" class="search-input" placeholder="Escreve o que procuras?">
+                    <button class="search-icon-btn">🔍</button>
+                </div>
+
+                <div class="suggestions">
+                    <p>O que faço para ser cliente fiel?</p>
+                    <p>Como posso candidatar-me?</p>
+                </div>
+            </div>
+        </div>
 
 
-    <!-------------------------------------------------------------------------
-    -----Cointainer----------- 
-    --------------------------------------------------------------------------->
-    <div class="container">
+
+
+
+        <!-------------------------------------------------------------------------
+        -----Menu Lateral - só abre no tablet/celular----------- 
+        --------------------------------------------------------------------------->
+        <div class="overlay" id="overlay" onclick="fecharMenu(event)">
+            <div class="menu-wrapper" onclick="event.stopPropagation()">
+
+                <div class="menu-header">
+                    <div class="menu-title">MENU</div>
+                    <button class="close-btn" onclick="fecharMenu(event)">×</button>
+                </div>
+
+                <div class="menu-body">
+
+                    <div class="item">
+                        <button class="item-btn" onclick="toggle(this)">Institucional <span class="arrow">▼</span></button>
+                        <div class="submenu">
+                            <a href="#">Quem Somos</a>
+                        </div>
+                    </div>
+
+                    <div class="item">
+                        <button class="item-btn" onclick="toggle(this)">Notícias <span class="arrow"
+                                style="visibility:hidden">▼</span></button>
+                    </div>
+
+                    <div class="item">
+                        <button class="item-btn" onclick="toggle(this)">Publicações <span class="arrow">▼</span></button>
+                        <div class="submenu">
+                            <a href="#">Legislações</a>
+                            <a href="#">Agenda</a>
+                        </div>
+                    </div>
+
+                    <div class="item">
+                        <button class="item-btn" onclick="toggle(this)">Informaçao <span class="arrow">▼</span></button>
+                        <div class="submenu">
+
+                            <div class="item">
+                                <button class="item-btn" onclick="toggle(this)">Serviços para Empresa <span
+                                        class="arrow">▼</span></button>
+                                <div class="submenu"></div>
+                            </div>
+
+                            <div class="item active">
+                                <button class="item-btn" onclick="toggle(this)">Serviços para Cidadão <span
+                                        class="arrow">▲</span></button>
+                                <div class="submenu show">
+                                    <a href="#">Emprego ou Estágio</a>
+                                    <a href="#">Formação Profissional</a>
+                                    <a href="#">Carteira Profissional</a>
+                                </div>
+                            </div>
+
+                            <div class="item">
+                                <button class="item-btn" onclick="toggle(this)">Serviços de Empreendedorismo <span
+                                        class="arrow">▼</span></button>
+                                <div class="submenu">
+                                    <a href="#">Serviços de Empreendedorismo e Inovação</a>
+                                    <a href="#">Rede de Centros de Empreendedorismo</a>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+
+
         <!-------------------------------------------------------------------------
         -----Categorias Top----------- 
         --------------------------------------------------------------------------->
-        <!-- Categorias deslizáveis -->
+        <!-- Categorias deslizáveis
         <div class="categories-wrapper">
             <div class="categories" id="categories">
                 <button class="cat-item active">
@@ -217,7 +225,7 @@
                     Todas categorias
                 </button>
             </div>
-        </div>
+        </div> -->
 
 
 
@@ -329,7 +337,7 @@
             <div class="parceiros-content p-contentOne">
                 <div class="parceiros-texto">
                     <p class="tag">NOSSOS SERVIÇOS</p>
-                    <h2>— Nós acreditamos que o atendimento é o começo de uma parceria grandiosa</h2>
+                    <h2>Nós acreditamos que o atendimento é o começo de uma parceria grandiosa</h2>
                     <p>É por isso que os nossos clientes são atendidos individualmente, pois assim, suas demandas são
                         compreendidas e os prazos são estabelecidos com fidelidade. Além disso, na sede existe segurança
                         máxima, tornando sua visita segura e confortável.</p>
@@ -627,7 +635,7 @@
         <div class="parceiros-content">
             <div class="parceiros-texto">
                 <p class="tag">NOSSOS PARCEIROS</p>
-                <h2>— Nós acreditamos que o atendimento é o começo de uma parceria grandiosa</h2>
+                <h2>Nós acreditamos que o atendimento é o começo de uma parceria grandiosa</h2>
                 <p>É por isso que os nossos clientes são atendidos individualmente, pois assim, suas demandas são
                     compreendidas e os prazos são estabelecidos com fidelidade. Além disso, na sede existe segurança
                     máxima, tornando sua visita segura e confortável.</p>
@@ -836,12 +844,14 @@
         line-height: 1.3;
         color: #222;
         margin-bottom: 20px;
+        text-align: justify;
     }
 
     .parceiros-texto p {
         font-size: 16px;
         line-height: 1.7;
         color: #555;
+        text-align: justify;
     }
 
     .parceiros-btn {
@@ -1000,6 +1010,7 @@
         line-height: 1.7;
         color: #444;
         margin: 0;
+        text-align: justify;
     }
 
     .lastfm-texto a {
@@ -1052,7 +1063,7 @@
 
     .parecido-cards {
         display: flex;
-        gap: 18px;
+        gap: 5px;
         flex-wrap: wrap;
     }
 
@@ -1063,8 +1074,8 @@
     }
 
     .parecido-card img {
-        width: 80px;
-        height: 80px;
+        width: 100px;
+        height: 100px;
         border-radius: 50%;
         object-fit: cover;
         margin-bottom: 8px;
@@ -1092,8 +1103,8 @@
 
         .lastfm-header {
             flex-direction: column;
-            align-items: flex-start;
-            text-align: left;
+            align-items: center;
+            text-align: justify;
         }
 
         .lastfm-btn {
@@ -1105,22 +1116,22 @@
     /* RESPONSIVO MOBILE */
     @media (max-width: 480px) {
         .lastfm-section {
-            padding: 30px 10px;
+            padding: 30px 0;
             margin: 0;
         }
 
         .avatar-grupo {
-            height: 70px;
+            height: 150px;
         }
 
         .avatar.centro {
-            width: 70px;
-            height: 70px;
+            width: 150px;
+            height: 150px;
         }
 
         .avatar.lateral {
-            width: 45px;
-            height: 45px;
+            width: 100px;
+            height: 100px;
         }
 
         .avatar.lateral:first-child {
@@ -1140,12 +1151,12 @@
         }
 
         .parecido-cards {
-            gap: 12px;
+            gap: 5px;
         }
 
         .parecido-card img {
-            width: 65px;
-            height: 65px;
+            width: 113px;
+            height: 113px;
         }
     }
 
