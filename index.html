@@ -1405,7 +1405,7 @@
     .fotos-parecidas {
         display: flex;
         flex-direction: column;
-        gap: 18px;
+        gap: 5px;
         max-height: 350px;
         overflow-y: auto;
         overflow-x: hidden;
@@ -1601,10 +1601,10 @@
         /* FOTOS PARECIDAS - CARROSSEL SEM CORTAR A PRIMEIRA */
         .fotos-parecidas {
             flex-direction: row;
-            gap: 18px;
+            -gap: 18px;
             overflow-x: auto;
             overflow-y: hidden;
-            padding: 10px 15px 15px 15px; /* padding-left 15px = primeira imagem inteira */
+            padding: 15px 0; /* padding-left 15px = primeira imagem inteira */
             max-width: 100%;
             scroll-snap-type: x mandatory;
             -webkit-overflow-scrolling: touch;
@@ -1627,16 +1627,16 @@
         .parecida-item {
             flex-direction: column;
             gap: 8px;
-            text-align: left;
-            min-width: 160px; /* corrigi: tava 150 sem px */
-            max-width: 160px;
+            text-align: center;
+            min-width: 113px; /* corrigi: tava 150 sem px */
+            max-width: 113px;
             flex-shrink: 0;
             scroll-snap-align: start;
         }
 
         .parecida-item img {
-            width: 160px; /* reduzi de 150px pra caber 3 na tela */
-            height: 160px;
+            width: 113px; /* reduzi de 150px pra caber 3 na tela */
+            height: 113px;
             border-radius: 50%;
             object-fit: cover;
         }
