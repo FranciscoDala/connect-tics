@@ -77,8 +77,8 @@ Header Menu
 }
 
 .btn-login {
-    background: #ff8c42;
-    color: #fff;
+    background: rgba(251, 191, 36, 0.95);
+    color: #000000;
     border: none;
     padding: 10px 50px;
     border-radius: 10px;
