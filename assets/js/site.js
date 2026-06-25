@@ -1,26 +1,63 @@
+
+
+// ============================================================================
+// login Modal =====
+// ============================================================================
+const modal = document.getElementById('loginModal');
+const btnLogin = document.querySelector('.btn-login'); 
+const btnClose = document.querySelector('.modal-close');
+const form = document.getElementById('loginForm');
+
+// Abrir modal
+btnLogin.addEventListener('click', () => {
+  modal.classList.add('active');
+});
+
+// Fechar modal - SÓ no botão X
+btnClose.addEventListener('click', () => {
+  modal.classList.remove('active');
+});
+
+// Submit - conecta com Supabase depois
+form.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const email = document.getElementById('email').value;
+  const senha = document.getElementById('senha').value;
+  
+  console.log('Login:', email, senha);
+  alert('Login enviado! Agora vamos conectar com Supabase.');
+  modal.classList.remove('active');
+});
+
+
+
+
+
+
+
 // ============================================================================
 // Botão de pesquisa e Modal =====
 // ============================================================================
 function toggleSearch() {
-const searchBlock = document.getElementById('searchBlock');
-searchBlock.classList.toggle('show'); // adiciona/remove a classe 'show'
+    const searchBlock = document.getElementById('searchBlock');
+    searchBlock.classList.toggle('show'); // adiciona/remove a classe 'show'
 
-// Se abriu, já foca no input pra digitar
-if(searchBlock.classList.contains('show')) {
-    document.querySelector('.search-input').focus();
-}
+    // Se abriu, já foca no input pra digitar
+    if (searchBlock.classList.contains('show')) {
+        document.querySelector('.search-input').focus();
+    }
 }
 
 // Fecha clicando no X
 document.getElementById('closeSearch').onclick = () => {
-document.getElementById('searchBlock').classList.remove('show');
+    document.getElementById('searchBlock').classList.remove('show');
 }
 
 // Fecha clicando fora da caixa azul
 document.getElementById('searchBlock').onclick = (e) => {
-if(e.target.id === 'searchBlock') {
-    document.getElementById('searchBlock').classList.remove('show');
-}
+    if (e.target.id === 'searchBlock') {
+        document.getElementById('searchBlock').classList.remove('show');
+    }
 }
 
 
@@ -34,15 +71,15 @@ const searchIcon = document.querySelector('.search-icon'); // tua lupa do menu
 const closeSearch = document.getElementById('closeSearch');
 
 searchIcon.onclick = () => {
-searchBlock.classList.add('show');
-document.querySelector('.search-input').focus();
+    searchBlock.classList.add('show');
+    document.querySelector('.search-input').focus();
 }
 
 closeSearch.onclick = () => searchBlock.classList.remove('show');
 
 // Fecha clicando fora da caixa azul
 searchBlock.onclick = (e) => {
-if(e.target === searchBlock) searchBlock.classList.remove('show');
+    if (e.target === searchBlock) searchBlock.classList.remove('show');
 }
 
 
