@@ -68,7 +68,7 @@ Header Menu
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 15px 20px 0 20px;
+    padding: 15px 15px 0 15px;
     -background: #816c6c;
 }
 
@@ -80,7 +80,7 @@ Header Menu
     background: #ff8c42;
     color: #fff;
     border: none;
-    padding: 12px 20px;
+    padding: 10px 50px;
     border-radius: 10px;
     font-size: 15px;
     font-weight: 600;
@@ -92,7 +92,7 @@ Header Menu
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 15px;
+    padding: 0 10px;
     -background: #ffffff;
     border-bottom: 1px solid #eee;
 }
@@ -267,7 +267,7 @@ Header Menu
 }
 
 .menu-wrapper {
-    width: 88%;
+    width: 70%;
     max-width: 340px;
     margin-left: -15px;
     background: #fff;
@@ -605,14 +605,14 @@ Categorias
 .categories-wrapper {
     padding: 20px 0;
     overflow: hidden;
-    background: #fff;
-    border-bottom: 1px solid #eee;
+    -border-bottom: 1px solid #eee;
+    -background: #00c6ff;
 }
 
 .categories {
     display: flex;
     gap: 12px;
-    padding: 0 20px;
+    padding: 0;
     overflow-x: auto;
     scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
@@ -627,12 +627,12 @@ Categorias
     display: flex;
     align-items: center;
     gap: 8px;
-    padding: 12px 20px;
-    background: transparent;
-    border: 1px solid #c1c5cc;
-    border-radius: 10px;
+    padding: 5px 20px;
+    background: rgba(251, 191, 36, 0.95);
+    border: 1px solid rgba(251, 191, 36, 0.95);
+    border-radius: 50px;
     font-size: 14px;
-    font-weight: 500;
+    font-weight: 600;
     color: #333;
     white-space: nowrap;
     cursor: pointer;
@@ -650,9 +650,8 @@ Categorias
 }
 
 .cat-item.active {
-    background: #1e3a6f;
-    color: #fff;
-    border-color: #1e3a6f;
+    background: rgba(251, 191, 36, 0.95);
+    -color: #fff;
 }
 
 /* Fade nas laterais pra indicar que tem mais */
@@ -673,12 +672,12 @@ Categorias
 
 .categories-wrapper::before {
     left: 0;
-    background: linear-gradient(to right, #fff 0%, transparent 100%);
+    -background: linear-gradient(to right, #fff 0%, transparent 100%);
 }
 
 .categories-wrapper::after {
     right: 0;
-    background: linear-gradient(to left, #fff 0%, transparent 100%);
+    -background: linear-gradient(to left, #fff 0%, transparent 100%);
 }
 
 
