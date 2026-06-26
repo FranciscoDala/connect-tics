@@ -540,6 +540,9 @@ button.menu-btn {
 
 /* Mobile */
 @media (max-width: 480px) {
+    .menu-header{
+        padding: 16px 0 16px 20px !important;
+    }
     .nav-bar {
         padding: 15px 0;
     }
