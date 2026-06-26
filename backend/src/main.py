@@ -24,25 +24,27 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# ===== CAMINHOS DE PASTAS PRA RENDER =====
-# Estrutura no Render: /opt/render/project/src/backend/src/main.py
-# Precisamos chegar em: /opt/render/project/
+# ===== CAMINHOS DE PASTAS - VERSÃO DINÂMICA =====
+# Procura a pasta /frontend sozinho, sem contar níveis
+def find_frontend_dir():
+    current_dir = os.path.dirname(__file__) # Começa em /backend/src/
+    for _ in range(5): # Sobe no máximo 5 níveis
+        if os.path.exists(os.path.join(current_dir, "frontend")):
+            return current_dir # Achou a raiz onde tem /frontend
+        current_dir = os.path.dirname(current_dir) # Sobe 1 nível
+    raise RuntimeError("Pasta 'frontend' não foi encontrada subindo 5 níveis")
 
-# Sobe 3 níveis: src > backend > src > SITE_WEB = raiz do projeto
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
-
-# Caminho final: SITE_WEB/frontend = onde estão todos os .html
+BASE_DIR = find_frontend_dir()
 STATIC_DIR = os.path.join(BASE_DIR, "frontend")
 
 # ===== ARQUIVOS ESTÁTICOS =====
 # Serve CSS, JS, imagens da pasta /static 
-# Ex: /static/style.css -> SITE_WEB/frontend/static/style.css
 app.mount("/static", StaticFiles(directory=os.path.join(STATIC_DIR, "static")), name="static")
 
 # ===== FUNÇÃO AUXILIAR =====
 def get_html_file(filename: str):
     """
-    Função: Verifica se o arquivo .html existe antes de devolver.
+    Verifica se o arquivo .html existe antes de devolver.
     Evita 500 e mostra 404 + caminho se faltar o arquivo. 
     """
     file_path = os.path.join(STATIC_DIR, filename)
@@ -53,39 +55,23 @@ def get_html_file(filename: str):
         )
     return FileResponse(file_path)
 
-# ===== ROTAS QUE DEVOLVEM HTML =====
-
-@app.get("/", tags=["Pages"])
-async def home():
-    """
-    GET / : Devolve index.html
-    """
+# ===== ROTAS =====
+@app.get("/")
+def home(): 
     return get_html_file("index.html")
 
-@app.get("/produtos", tags=["Pages"])
-async def produtos():
-    """
-    GET /produtos : Devolve produtos.html
-    """
+@app.get("/produtos")
+def produtos():
     return get_html_file("produtos.html")
 
-@app.get("/encomendas", tags=["Pages"])
-async def encomendas():
-    """
-    GET /encomendas : Devolve encomendas.html
-    """
+@app.get("/encomendas")
+def encomendas():
     return get_html_file("encomendas.html")
 
-@app.get("/login", tags=["Pages"])
-async def login():
-    """
-    GET /login : Devolve login.html
-    """
+@app.get("/login")
+def login():
     return get_html_file("login.html")
 
-@app.get("/quem-somos", tags=["Pages"])
-async def quem_somos():
-    """
-    GET /quem-somos : Devolve quem-somos.html
-    """
+@app.get("/quem-somos")
+def quem_somos():
     return get_html_file("quem-somos.html")
