@@ -4,74 +4,28 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 import os
 
-# ===== INICIALIZAÇÃO DA API =====
-app = FastAPI(
-    title="Connect-Tics API",
-    description="API do site Connect-Tics. Serve o frontend e endpoints.",
-    version="0.1.0"
-)
+app = FastAPI()
+app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_credentials=True, allow_methods=["*"], allow_headers=["*"])
 
-# ===== MIDDLEWARE CORS =====
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=[
-        "https://azulula-mbugue.vercel.app",
-        "http://localhost:5500",
-        "http://localhost:3000"
-    ],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
-# ===== CAMINHOS DE PASTAS - VERSÃO DINÂMICA =====
-# Procura a pasta /frontend sozinho, sem contar níveis
+# ===== DEBUG TOTAL =====
 def find_frontend_dir():
-    current_dir = os.path.dirname(__file__) # Começa em /backend/src/
-    for _ in range(5): # Sobe no máximo 5 níveis
-        if os.path.exists(os.path.join(current_dir, "frontend")):
-            return current_dir # Achou a raiz onde tem /frontend
-        current_dir = os.path.dirname(current_dir) # Sobe 1 nível
-    raise RuntimeError("Pasta 'frontend' não foi encontrada subindo 5 níveis")
+    current_dir = os.path.dirname(__file__)
+    for i in range(5):
+        test_path = os.path.join(current_dir, "frontend")
+        if os.path.exists(test_path):
+            return current_dir 
+        current_dir = os.path.dirname(current_dir)
+    return "NAO_ACHOU" # Se não achar
 
 BASE_DIR = find_frontend_dir()
 STATIC_DIR = os.path.join(BASE_DIR, "frontend")
 
-# ===== ARQUIVOS ESTÁTICOS =====
-# Serve CSS, JS, imagens da pasta /static 
-app.mount("/static", StaticFiles(directory=os.path.join(STATIC_DIR, "static")), name="static")
-
-# ===== FUNÇÃO AUXILIAR =====
-def get_html_file(filename: str):
-    """
-    Verifica se o arquivo .html existe antes de devolver.
-    Evita 500 e mostra 404 + caminho se faltar o arquivo. 
-    """
-    file_path = os.path.join(STATIC_DIR, filename)
-    if not os.path.exists(file_path):
-        return JSONResponse(
-            status_code=404, 
-            content={"error": f"Arquivo não encontrado: {filename}", "path": file_path}
-        )
-    return FileResponse(file_path)
-
-# ===== ROTAS =====
 @app.get("/")
-def home(): 
-    return get_html_file("index.html")
-
-@app.get("/produtos")
-def produtos():
-    return get_html_file("produtos.html")
-
-@app.get("/encomendas")
-def encomendas():
-    return get_html_file("encomendas.html")
-
-@app.get("/login")
-def login():
-    return get_html_file("login.html")
-
-@app.get("/quem-somos")
-def quem_somos():
-    return get_html_file("quem-somos.html")
+def debug():
+    return {
+        "ARQUIVO_ATUAL": __file__,
+        "BASE_DIR_ACHADO": BASE_DIR,
+        "STATIC_DIR": STATIC_DIR, 
+        "PROCURANDO_INDEX_EM": os.path.join(STATIC_DIR, "index.html"),
+        "EXISTE_INDEX?": os.path.exists(os.path.join(STATIC_DIR, "index.html"))
+    }
