@@ -12,27 +12,24 @@ app = FastAPI(
 )
 
 # ===== MIDDLEWARE CORS =====
-# Libera requisições do teu frontend no Vercel pra API
-# Sem isso o navegador bloqueia por segurança: CORS error
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "https://azulula-mbugue.vercel.app",  # Domínio do teu site Vercel
-        "http://localhost:5500",              # Pra testar local com Live Server
-        "http://localhost:3000"               # Pra testar local com React/Vite
+        "https://azulula-mbugue.vercel.app",
+        "http://localhost:5500",
+        "http://localhost:3000"
     ],
     allow_credentials=True,
-    allow_methods=["*"],  # Libera GET, POST, PUT, DELETE, OPTIONS...
-    allow_headers=["*"],  # Libera todos os headers
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 # ===== CAMINHOS DE PASTAS PRA RENDER =====
-# Arquivo atual: SITE_WEB/backend/src/main.py
-# __file__ = /opt/render/project/src/main.py no Render
-# Precisamos chegar na raiz: SITE_WEB/ = /opt/render/project/
+# Estrutura no Render: /opt/render/project/src/backend/src/main.py
+# Precisamos chegar em: /opt/render/project/
 
-# Sobe 2 níveis: src > backend > SITE_WEB = raiz do projeto
-BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+# Sobe 3 níveis: src > backend > src > SITE_WEB = raiz do projeto
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 
 # Caminho final: SITE_WEB/frontend = onde estão todos os .html
 STATIC_DIR = os.path.join(BASE_DIR, "frontend")
@@ -46,7 +43,7 @@ app.mount("/static", StaticFiles(directory=os.path.join(STATIC_DIR, "static")), 
 def get_html_file(filename: str):
     """
     Função: Verifica se o arquivo .html existe antes de devolver.
-    Evita 500 Internal Server Error e mostra 404 se faltar o arquivo.
+    Evita 500 e mostra 404 + caminho se faltar o arquivo. 
     """
     file_path = os.path.join(STATIC_DIR, filename)
     if not os.path.exists(file_path):
@@ -61,44 +58,34 @@ def get_html_file(filename: str):
 @app.get("/", tags=["Pages"])
 async def home():
     """
-    GET /
-    Rota: Página inicial
-    Função: Devolve o arquivo index.html da pasta frontend/
+    GET / : Devolve index.html
     """
     return get_html_file("index.html")
 
 @app.get("/produtos", tags=["Pages"])
 async def produtos():
     """
-    GET /produtos
-    Rota: Página de produtos
-    Função: Devolve o arquivo produtos.html
+    GET /produtos : Devolve produtos.html
     """
     return get_html_file("produtos.html")
 
 @app.get("/encomendas", tags=["Pages"])
 async def encomendas():
     """
-    GET /encomendas
-    Rota: Página de encomendas/carrinho
-    Função: Devolve o arquivo encomendas.html
+    GET /encomendas : Devolve encomendas.html
     """
     return get_html_file("encomendas.html")
 
 @app.get("/login", tags=["Pages"])
 async def login():
     """
-    GET /login
-    Rota: Página de login
-    Função: Devolve o arquivo login.html
+    GET /login : Devolve login.html
     """
     return get_html_file("login.html")
 
 @app.get("/quem-somos", tags=["Pages"])
 async def quem_somos():
     """
-    GET /quem-somos
-    Rota: Página institucional
-    Função: Devolve o arquivo quem-somos.html
+    GET /quem-somos : Devolve quem-somos.html
     """
     return get_html_file("quem-somos.html")
