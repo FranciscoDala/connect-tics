@@ -1,39 +1,6 @@
-
-
-// ============================================================================
-// login Modal =====
-// ============================================================================
-const modal = document.getElementById('loginModal');
-const btnLogin = document.querySelector('.btn-login'); 
-const btnClose = document.querySelector('.modal-close');
-const form = document.getElementById('loginForm');
-
-// Abrir modal
-btnLogin.addEventListener('click', () => {
-  modal.classList.add('active');
-});
-
-// Fechar modal - SÓ no botão X
-btnClose.addEventListener('click', () => {
-  modal.classList.remove('active');
-});
-
-// Submit - conecta com Supabase depois
-form.addEventListener('submit', (e) => {
-  e.preventDefault();
-  const email = document.getElementById('email').value;
-  const senha = document.getElementById('senha').value;
-  
-  console.log('Login:', email, senha);
-  alert('Login enviado! Agora vamos conectar com Supabase.');
-  modal.classList.remove('active');
-});
-
-
-
-
-
-
+const btnLogin = document.querySelector('.btn-login'); // Linha 7
+const btnClose = document.querySelector('.modal-close'); // Linha 8
+const form = document.getElementById('loginForm'); // Linha 10
 
 // ============================================================================
 // Botão de pesquisa e Modal =====
@@ -59,6 +26,83 @@ document.getElementById('searchBlock').onclick = (e) => {
         document.getElementById('searchBlock').classList.remove('show');
     }
 }
+
+
+
+
+
+
+// ============================================================================
+// Login Modal =====
+// ============================================================================
+
+document.addEventListener('DOMContentLoaded', () => {
+
+    // ===== 1. PEGA OS ELEMENTOS =====
+    const modal = document.getElementById('loginModal'); // Tua .modal-overlay
+    const btnLogin = document.querySelector('.btn-login'); // Botão "Login" do menu
+    const btnClose = document.querySelector('.modal-close'); // X
+    const form = document.getElementById('loginForm');
+
+    function showAlert(icon, title, text) {
+        Swal.fire({
+            width: '400px', icon: icon, title: title, text: text,
+            confirmButtonColor: icon === 'error' ? '#d33' : '#3085d6',
+            background: '#1a1a1a', color: '#fff'
+        });
+    }
+
+    // ===== 2. ABRIR / FECHAR MODAL CUSTOM =====
+    // Abre: só adiciona .active
+    btnLogin?.addEventListener('click', (e) => {
+        e.preventDefault(); // Se for <a href="#">
+        modal?.classList.add('active');
+    });
+
+    // Fecha: no X
+    btnClose?.addEventListener('click', () => modal?.classList.remove('active'));
+
+    // Fecha: clicando fora
+    modal?.addEventListener('click', (e) => { 
+        if (e.target === modal) modal.classList.remove('active'); 
+    });
+
+    // ===== 3. LOGIN VIA AJAX - SEM RECARREGAR =====
+    form?.addEventListener('submit', async (e) => {
+        e.preventDefault(); // TRAVA O RECARREGAMENTO
+
+        const username = document.getElementById('username')?.value.trim();
+        const password = document.getElementById('password')?.value.trim();
+
+        if (username === '' || password === '') {
+            showAlert('warning', 'Atenção', 'Preencha usuário e senha');
+            return;
+        }
+
+        const formData = new FormData(form);
+        try {
+            const response = await fetch('/login', { method: 'POST', body: formData });
+            const data = await response.json();
+
+            if (response.ok) { // 200
+                modal.classList.remove('active'); // Fecha tua modal custom
+                window.location.href = data.redirect; // Vai pro /admin
+            } else { // 401
+                showAlert('error', 'Oops...', data.detail); // Fica aberta + SweetAlert
+            }
+        } catch (error) {
+            showAlert('error', 'Erro', 'Servidor fora do ar');
+        }
+    });
+});
+
+
+
+
+
+
+
+
 
 
 

@@ -7,7 +7,6 @@
     font-style: normal;
 }
 
-* {}
 
 body {
     font-family: 'myFonte-normal' !important;
@@ -69,7 +68,7 @@ login
     box-shadow: 0 8px 20px rgba(255, 193, 7, 0.4);
 }
 
-/* Overlay escuro */
+/* Overlay escuro*/
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -84,7 +83,7 @@ login
     opacity: 0;
     visibility: hidden;
     transition: 0.3s;
-    z-index: 9999;
+    z-index: 999;
 }
 
 .modal-overlay.active {
@@ -129,7 +128,7 @@ login
     width: 100%;
     padding: 15px 20px;
     background: rgba(255, 255, 255, 0.08);
-    border: 1px solid  rgba(255, 193, 7, 0.4);
+    border: 1px solid rgba(255, 193, 7, 0.4);
     box-shadow: 0 8px 20px rgba(255, 193, 7, 0.4);
     border-radius: 12px;
     color: #fff;
@@ -191,19 +190,13 @@ login
     .modal-glass h2 {
         font-size: 1.5rem;
     }
+
     /* Botão Fechar */
     .modal-close {
         top: 25px !important;
         right: -10px !important;
     }
 }
-
-
-
-
-
-
-
 
 
 
@@ -501,10 +494,12 @@ button.menu-btn {
     color: #fff;
     font-weight: 500;
 }
+
 .a_link {
     text-decoration: none;
     color: #333;
 }
+
 .arrow {
     font-size: 11px;
     color: #666;
@@ -540,9 +535,10 @@ button.menu-btn {
 
 /* Mobile */
 @media (max-width: 480px) {
-    .menu-header{
+    .menu-header {
         padding: 16px 0 16px 20px !important;
     }
+
     .nav-bar {
         padding: 15px 0;
     }
