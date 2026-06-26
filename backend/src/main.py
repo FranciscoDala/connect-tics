@@ -24,9 +24,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# ===== CAMINHOS DE PASTAS PRA RENDER - AJUSTADO 2 NIVEIS =====
-# Sobe 2 níveis com caminho absoluto: main.py -> backend -> RAIZ
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# ===== CAMINHOS DE PASTAS PRA RENDER - AJUSTADO 3 NIVEIS =====
+# Sobe 3 níveis: main.py -> src -> backend -> RAIZ
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # Caminho final: RAIZ/frontend = onde estão todos os .html
 STATIC_DIR = os.path.join(BASE_DIR, "frontend")
