@@ -24,17 +24,17 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# ===== CAMINHOS DE PASTAS PRA RENDER - AJUSTADO 3 NIVEIS =====
+# ===== CAMINHOS DE PASTAS PRA RENDER - AJUSTADO PRA STATIC =====
 # Sobe 3 níveis: main.py -> src -> backend -> RAIZ
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-# Caminho final: RAIZ/frontend = onde estão todos os .html
-STATIC_DIR = os.path.join(BASE_DIR, "frontend")
+# Caminho final: RAIZ/frontend/static = onde estão todos os .html agora
+STATIC_DIR = os.path.join(BASE_DIR, "frontend", "static")
 
 # ===== ARQUIVOS ESTÁTICOS =====
-# Serve CSS, JS, imagens da pasta /static 
+# Serve CSS, JS, imagens da mesma pasta /static 
 # Ex: /static/style.css -> RAIZ/frontend/static/style.css
-app.mount("/static", StaticFiles(directory=os.path.join(STATIC_DIR, "static")), name="static")
+app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 
 # ===== FUNÇÃO AUXILIAR =====
 def get_html_file(filename: str):
