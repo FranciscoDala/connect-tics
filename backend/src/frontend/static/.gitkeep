@@ -1,9 +1,0 @@
-git add .
-git commit -m "fix: adicionar pasta frontend/static vazia"
-git push origin main
-
-
-
-git add .
-git commit -m "fix: criar pasta static vazia com gitkeep"
-git push origin main

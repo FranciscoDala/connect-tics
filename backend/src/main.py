@@ -22,7 +22,9 @@ app.add_middleware(
 # Arquivo atual: SITE_WEB/backend/src/main.py
 # Precisamos subir 4 níveis: src > backend > SITE_WEB > raiz
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
-STATIC_DIR = os.path.join(BASE_DIR, "frontend", "static") # Caminho: SITE_WEB/frontend/static
+
+# Caminho: SITE_WEB/frontend/static
+STATIC_DIR = os.path.join(os.path.dirname(__file__), "frontend", "static")
 
 # ===== ARQUIVOS ESTÁTICOS =====
 # Serve tudo da pasta /static -> CSS, JS, imagens
