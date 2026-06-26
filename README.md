@@ -1,6 +1,41 @@
+
+
+
+
+# superbase db
+  user - connect-tics-db
+  pass - hJWehG3i.uj5qGz
+
+postgresql://postgres:hJWehG3i.uj5qGz@db.szcixxalvjrgdiwandtj.supabase.co:5432/postgres
+
+
 # codigo para criar as pastas do projectos
 
     mkdir site_web\backend\src\api,site_web\backend\src\core,site_web\backend\src\database,site_web\backend\src\services,site_web\backend\src\schemas,site_web\backend\src\utils,site_web\backend\tests,site_web\backend\migrations,site_web\frontend\templates,site_web\frontend\static\css,site_web\frontend\static\js,site_web\frontend\static\img
+
+
+
+
+
+
+
+
+# codigo para subir arquivos no gitHub
+  # 1. Ver o que mudou
+  git status
+
+  # 2. Adiciona tudo 
+  git add .
+
+  # 3. Cria o commit
+  git commit -m "fix: ajusta path do frontend pra Render com abspath"
+
+  # 4. Sobe pro GitHub
+  git push origin main
+
+
+
+
 
 
 
