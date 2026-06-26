@@ -4,28 +4,70 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 import os
 
-app = FastAPI()
-app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_credentials=True, allow_methods=["*"], allow_headers=["*"])
+# ===== INICIALIZAÇÃO DA API =====
+app = FastAPI(
+    title="Connect-Tics API",
+    description="API do site Connect-Tics. Serve o frontend e endpoints.",
+    version="0.1.0"
+)
 
-# ===== DEBUG TOTAL =====
-def find_frontend_dir():
-    current_dir = os.path.dirname(__file__)
-    for i in range(5):
-        test_path = os.path.join(current_dir, "frontend")
-        if os.path.exists(test_path):
-            return current_dir 
-        current_dir = os.path.dirname(current_dir)
-    return "NAO_ACHOU" # Se não achar
+# ===== MIDDLEWARE CORS =====
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "https://azulula-mbugue.vercel.app",
+        "http://localhost:5500",
+        "http://localhost:3000"
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
-BASE_DIR = find_frontend_dir()
+# ===== CAMINHOS DE PASTAS PRA RENDER - AJUSTADO =====
+# Sobe 3 níveis com caminho absoluto: main.py -> src -> backend -> RAIZ
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+# Caminho final: RAIZ/frontend = onde estão todos os .html
 STATIC_DIR = os.path.join(BASE_DIR, "frontend")
 
-@app.get("/")
-def debug():
-    return {
-        "ARQUIVO_ATUAL": __file__,
-        "BASE_DIR_ACHADO": BASE_DIR,
-        "STATIC_DIR": STATIC_DIR, 
-        "PROCURANDO_INDEX_EM": os.path.join(STATIC_DIR, "index.html"),
-        "EXISTE_INDEX?": os.path.exists(os.path.join(STATIC_DIR, "index.html"))
-    }
+# ===== ARQUIVOS ESTÁTICOS =====
+# Serve CSS, JS, imagens da pasta /static 
+# Ex: /static/style.css -> RAIZ/frontend/static/style.css
+app.mount("/static", StaticFiles(directory=os.path.join(STATIC_DIR, "static")), name="static")
+
+# ===== FUNÇÃO AUXILIAR =====
+def get_html_file(filename: str):
+    """
+    Verifica se o arquivo .html existe antes de devolver.
+    Evita 500 e mostra 404 + caminho se faltar o arquivo. 
+    """
+    file_path = os.path.join(STATIC_DIR, filename)
+    if not os.path.exists(file_path):
+        return JSONResponse(
+            status_code=404, 
+            content={"error": f"Arquivo não encontrado: {filename}", "path": file_path}
+        )
+    return FileResponse(file_path)
+
+# ===== ROTAS QUE DEVOLVEM HTML - TUAS ROTAS INTACTAS =====
+
+@app.get("/", tags=["Pages"])
+async def home():
+    return get_html_file("index.html")
+
+@app.get("/produtos", tags=["Pages"])
+async def produtos():
+    return get_html_file("produtos.html")
+
+@app.get("/encomendas", tags=["Pages"])
+async def encomendas():
+    return get_html_file("encomendas.html")
+
+@app.get("/login", tags=["Pages"])
+async def login():
+    return get_html_file("login.html")
+
+@app.get("/quem-somos", tags=["Pages"])
+async def quem_somos():
+    return get_html_file("quem-somos.html")
