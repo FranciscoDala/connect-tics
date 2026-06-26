@@ -2,7 +2,7 @@ services:
     - type: web
     name: connect-tics-api
     env: python
-    rootDir: backend
-    buildCommand: "pip install -r requirements.txt"
-    startCommand: "uvicorn src.main:app --host 0.0.0.0 --port $PORT"
+    rootDir: backend/src   # <- TROCA AQUI: era só 'backend'
+    buildCommand: "pip install -r ../requirements.txt"  # <- TROCA AQUI: sobe 1 pasta pra achar o requirements
+    startCommand: "uvicorn main:app --host 0.0.0.0 --port $PORT"  # <- TROCA AQUI: era 'src.main:app'
     autoDeploy: true

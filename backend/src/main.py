@@ -4,40 +4,68 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 import os
 
-app = FastAPI()
+# ===== INICIALIZAÇÃO DA API =====
+app = FastAPI(title="Connect-Tics API")
 
-# 1. CORS - Libera teu site Vercel
+# ===== MIDDLEWARE CORS =====
+# Libera requisições do teu frontend no Vercel
+# Sem isso o navegador bloqueia por segurança
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://azulula-mbugue.vercel.app"], 
+    allow_origins=["https://azulula-mbugue.vercel.app"], # Domínio do teu site Vercel
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["*"],  # Libera GET, POST, PUT, DELETE...
     allow_headers=["*"],
 )
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
-STATIC_DIR = os.path.join(BASE_DIR, "frontend", "static")
+# ===== CAMINHOS DE PASTAS CORRIGIDOS PRA RENDER =====
+# Arquivo atual: SITE_WEB/backend/src/main.py
+# Precisamos subir 4 níveis: src > backend > SITE_WEB > raiz
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
+STATIC_DIR = os.path.join(BASE_DIR, "frontend", "static") # Caminho: SITE_WEB/frontend/static
 
-# Servir arquivos estáticos (CSS, JS, imagens e HTML)
+# ===== ARQUIVOS ESTÁTICOS =====
+# Serve tudo da pasta /static -> CSS, JS, imagens
 app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 
-# Rotas que devolvem arquivos HTML direto
+# ===== ROTAS QUE DEVOLVEM HTML =====
+
 @app.get("/")
 async def home():
+    """
+    GET /
+    Função: Devolve o arquivo index.html da pasta static
+    """
     return FileResponse(os.path.join(STATIC_DIR, "index.html"))
 
 @app.get("/produtos")
 async def produtos():
+    """
+    GET /produtos
+    Função: Devolve a página produtos.html
+    """
     return FileResponse(os.path.join(STATIC_DIR, "produtos.html"))
 
 @app.get("/encomendas")
 async def encomendas():
+    """
+    GET /encomendas
+    Função: Devolve a página encomendas.html
+    """
     return FileResponse(os.path.join(STATIC_DIR, "encomendas.html"))
 
 @app.get("/login")
 async def login():
+    """
+    GET /login
+    Função: Devolve a página login.html
+    """
     return FileResponse(os.path.join(STATIC_DIR, "login.html"))
 
 @app.get("/quem-somos")
 async def quem_somos():
+    """
+    GET /quem-somos
+    Função: Devolve a página quem-somos.html
+    """
     return FileResponse(os.path.join(STATIC_DIR, "quem-somos.html"))
