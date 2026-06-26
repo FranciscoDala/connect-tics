@@ -501,7 +501,7 @@ button.menu-btn {
     color: #fff;
     font-weight: 500;
 }
-.item-btn a {
+.a_link {
     text-decoration: none;
     color: #333;
 }
