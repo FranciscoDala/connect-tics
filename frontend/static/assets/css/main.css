@@ -502,7 +502,7 @@ button.menu-btn {
     font-weight: 500;
 }
 .item-btn a {
-    text-decoration: underline;
+    text-decoration: none;
     color: #333;
 }
 .arrow {
