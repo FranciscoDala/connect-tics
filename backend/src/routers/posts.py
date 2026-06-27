@@ -11,35 +11,27 @@ from database.database import get_db
 from database.models import Post as PostModel, PostImage as PostImageModel, Category as CategoryModel
 from schemas.posts import PostOut, PostType
 
-router = APIRouter(prefix="/posts", tags=["posts"]) # <-- CORRIGIDO: TIREI O /ADMIN
+router = APIRouter(prefix="/posts", tags=["posts"])
 logger = logging.getLogger(__name__)
-
-
-
-
-
-
-
 # ===================================================================
-# CAMINHOS FIXOS: A:\site_web\frontend\static\assets\img\uploads
+# CORRIGIDO V33: 3x .parent PRA CHEGAR NA RAIZ DO PROJETO
 # ===================================================================
-UPLOAD_DIR = Path(r"A:\site_web\frontend\static\assets\img\uploads") # <-- ABSOLUTO. SEM parents
+ROUTERS_DIR = Path(__file__).resolve().parent          # /src/backend/src/routers
+SRC_DIR = ROUTERS_DIR.parent                           # /src/backend/src
+BACKEND_DIR = SRC_DIR.parent                           # /src/backend
+PROJECT_ROOT = BACKEND_DIR.parent                      # /src  <-- RAIZ AQUI
+
+STATIC_DIR = PROJECT_ROOT / "frontend" / "static"      # /src/frontend/static
+UPLOAD_DIR = STATIC_DIR / "assets" / "img" / "uploads" # /src/frontend/static/assets/img/uploads
 UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
 BASE_URL_PATH = "/static/assets/img/uploads" # URL que o browser usa
 
 logger.info(f"====================================")
-logger.info(f"UPLOAD_DIR FIXO: {UPLOAD_DIR.resolve()}") # <-- Tem que dar A:\site_web\frontend...
+logger.info(f"PROJECT_ROOT: {PROJECT_ROOT.resolve()}") # Tem que dar /src
+logger.info(f"UPLOAD_DIR FIXO: {UPLOAD_DIR.resolve()}") # Tem que dar /src/frontend/static/...
 logger.info(f"EXISTE? {UPLOAD_DIR.exists()}")
 logger.info(f"====================================")
 # ===================================================================
-
-
-
-
-
-
-
-
 
 
 def _save_upload(file: UploadFile | None) -> str | None:
@@ -73,7 +65,7 @@ def _sync_images(db: Session, post: PostModel, files: list[UploadFile]):
             try: file_path.unlink()
             except: pass
     db.query(PostImageModel).filter(PostImageModel.post_id == post.id).delete(synchronize_session=False)
-    
+
     for f in files:
         if f and f.filename:
             url = _save_upload(f)
@@ -85,39 +77,39 @@ def _sync_images(db: Session, post: PostModel, files: list[UploadFile]):
 def read_posts(limit: int = 100, skip: int = 0, db: Session = Depends(get_db)):
     stmt = (
         select(PostModel)
-       .options(joinedload(PostModel.images), joinedload(PostModel.category))
-       .order_by(PostModel.created_at.desc())
-       .offset(skip)
-       .limit(limit)
+      .options(joinedload(PostModel.images), joinedload(PostModel.category))
+      .order_by(PostModel.created_at.desc())
+      .offset(skip)
+      .limit(limit)
     )
-    posts = db.execute(stmt).unique().scalars().all() # <-- CORRIGIDO:.unique() antes do.scalars()
+    posts = db.execute(stmt).unique().scalars().all()
     return [_build_post_out(p, p.category.name if p.category else "") for p in posts]
 @router.post("", response_model=PostOut, status_code=status.HTTP_201_CREATED)
 async def create_post(
-    category_id: int = Form(...), 
-    title: str = Form(...), 
+    category_id: int = Form(...),
+    title: str = Form(...),
     type: PostType = Form(...),
-    is_highlighted: bool = Form(False), 
-    content: str | None = Form(None), 
-    price: float | None = Form(None), 
-    link: str | None = Form(None), 
-    cover_image: UploadFile | None = File(None), 
-    images: list[UploadFile] | None = File(None), 
+    is_highlighted: bool = Form(False),
+    content: str | None = Form(None),
+    price: float | None = Form(None),
+    link: str | None = Form(None),
+    cover_image: UploadFile | None = File(None),
+    images: list[UploadFile] | None = File(None),
     db: Session = Depends(get_db)
 ):
     category = db.get(CategoryModel, category_id)
     if not category: raise HTTPException(status_code=404, detail=f"Category {category_id} not found")
-    
+
     cover_url = _save_upload(cover_image)
-    
+
     db_post = PostModel(
-        category_id=category_id, 
-        title=title, 
+        category_id=category_id,
+        title=title,
         type=type,
-        is_highlighted=is_highlighted, 
-        content=content, 
-        price=price, 
-        link=link, 
+        is_highlighted=is_highlighted,
+        content=content,
+        price=price,
+        link=link,
         cover_image=cover_url
     )
     db.add(db_post)
@@ -125,10 +117,10 @@ async def create_post(
     db.refresh(db_post)
 
     if type == PostType.fotos:
-        if not images or not any(f.filename for f in images): 
+        if not images or not any(f.filename for f in images):
             raise HTTPException(status_code=400, detail="Type 'fotos' precisa de ao menos 1 imagem")
         _sync_images(db, db_post, images)
-    
+
     db.refresh(db_post, attribute_names=['images'])
     return _build_post_out(db_post, category.name)
 
@@ -141,17 +133,17 @@ def read_post(post_id: int, db: Session = Depends(get_db)):
 
 @router.put("/{post_id}", response_model=PostOut)
 async def update_post(
-    post_id: int, 
-    category_id: int = Form(...), 
-    title: str = Form(...), 
+    post_id: int,
+    category_id: int = Form(...),
+    title: str = Form(...),
     type: PostType = Form(...),
-    is_highlighted: bool = Form(False), 
-    content: str | None = Form(None), 
-    price: float | None = Form(None), 
-    link: str | None = Form(None), 
-    cover_image: UploadFile | None = File(None), 
-    images: list[UploadFile] | None = File(None), 
-    existing_images: list[str] = Form([]), 
+    is_highlighted: bool = Form(False),
+    content: str | None = Form(None),
+    price: float | None = Form(None),
+    link: str | None = Form(None),
+    cover_image: UploadFile | None = File(None),
+    images: list[UploadFile] | None = File(None),
+    existing_images: list[str] = Form([]),
     db: Session = Depends(get_db)
 ):
     db_post = db.get(PostModel, post_id)

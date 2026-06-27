@@ -1,5 +1,6 @@
 from contextlib import asynccontextmanager
 from pathlib import Path
+import os
 
 from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
@@ -17,10 +18,12 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # ===================================================================
-# CORRIGIDO V30: UPLOADS EM assets/img/uploads
+# CORRIGIDO V32: APONTA PRA RAIZ/FRONTEND/STATIC
 # ===================================================================
-STATIC_DIR = Path(r"A:\site_web\frontend\static")
-UPLOADS_DIR = STATIC_DIR / "assets" / "img" / "uploads" # <-- MUDOU AQUI
+BACKEND_DIR = Path(__file__).resolve().parent.parent  # /src/backend/src -> /src/backend
+PROJECT_ROOT = BACKEND_DIR.parent                     # /src/backend -> /src
+STATIC_DIR = PROJECT_ROOT / "frontend" / "static"     # /src/frontend/static  <-- AQUI ESTÁ O TEU CSS/JS/IMG
+UPLOADS_DIR = STATIC_DIR / "assets" / "img" / "uploads" 
 
 if not STATIC_DIR.exists():
     raise RuntimeError(f"❌ ERRO FATAL: Pasta não existe: {STATIC_DIR.resolve()}")
@@ -30,7 +33,7 @@ if not STATIC_DIR.exists():
 async def lifespan(app: FastAPI):
     logger.info("🚀 Criando tabelas e seed admin...")
     Base.metadata.create_all(bind=engine)
-    UPLOADS_DIR.mkdir(parents=True, exist_ok=True) # Cria assets/img/uploads sozinho
+    UPLOADS_DIR.mkdir(parents=True, exist_ok=True)
     logger.info(f"📁 PASTA UPLOADS GARANTIDA: {UPLOADS_DIR.resolve()}")
     db = SessionLocal()
     try:
@@ -65,8 +68,9 @@ app.include_router(categories.router, prefix="/admin")
 app.include_router(pages.router)
 
 logger.info(f"====================================")
+logger.info(f"📁 PROJECT_ROOT: {PROJECT_ROOT.resolve()}")
 logger.info(f"📁 PASTA STATIC: {STATIC_DIR.resolve()}")
-logger.info(f"📁 PASTA UPLOADS: {UPLOADS_DIR.resolve()}") # <-- Log atualizado
+logger.info(f"📁 PASTA UPLOADS: {UPLOADS_DIR.resolve()}")
 logger.info(f"📁 STATIC EXISTE? {STATIC_DIR.exists()}")
 logger.info(f"📁 UPLOADS EXISTE? {UPLOADS_DIR.exists()}")
 logger.info(f"====================================")
