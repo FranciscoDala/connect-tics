@@ -36,15 +36,15 @@ async function apiFetch(url, options = {}) {
     const token = localStorage.getItem('access_token');
     const headers = {
        'Authorization': token? `Bearer ${token}` : '',
-      ...options.headers,
+     ...options.headers,
     };
     const response = await fetch(url, {...options, headers});
 
     if (response.status === 401) {
         localStorage.removeItem('access_token');
-        // Se não estiver já no login, manda pra lá
-        if(!window.location.pathname.includes('/index')){
-            window.location.replace('/index?auth=required');
+        // Se não estiver já na raiz, manda pra lá. Corrigido: era /index
+        if(!window.location.pathname.includes('/')){
+            window.location.replace('/?auth=required');
         }
         return null; // Para a execução
     }
@@ -91,7 +91,7 @@ if(loginForm) { // Só executa se estiver na página de login
 
         const formData = new FormData(loginForm);
         try {
-            const response = await fetch('/api/login', { method: 'POST', body: formData }); 
+            const response = await fetch('/login', { method: 'POST', body: formData }); // <-- SÓ MUDEI AQUI: /api/login -> /login
             const data = await response.json();
             if (response.ok) {
                 localStorage.setItem('access_token', data.access_token); 
@@ -113,7 +113,7 @@ if (window.location.pathname === '/admin') {
     document.addEventListener('DOMContentLoaded', async () => {
         const token = localStorage.getItem('access_token');
         if (!token) {
-            window.location.replace('/index?auth=required'); 
+            window.location.replace('/?auth=required'); // <-- Corrigido: era /index
             return;
         }
 
@@ -125,12 +125,6 @@ if (window.location.pathname === '/admin') {
         // Se deu 401, o apiFetch já te jogou pro login
     });
 }
-
-
-
-
-
-
 
 
 
@@ -154,14 +148,6 @@ searchBlock.onclick = (e) => {
 }
 
 
-
-
-
-
-
-
-
-
 // ============================================================================
 // Menu lateral =====
 // ============================================================================
@@ -182,7 +168,7 @@ function toggle(btn) {
     if (submenu && submenu.classList.contains('submenu')) {
         submenu.classList.toggle('show');
         if (arrow) {
-            arrow.innerHTML = submenu.classList.contains('show') ? '▲' : '▼';
+            arrow.innerHTML = submenu.classList.contains('show')? '▲' : '▼';
         }
     }
 }
@@ -193,7 +179,7 @@ function toggle(btn) {
 // Menu Desktop com click para pc =====
 // ============================================================================
 document.addEventListener('DOMContentLoaded', function () {
-    const menuItems = document.querySelectorAll('.menu-desktop > .item > .item-btn');
+    const menuItems = document.querySelectorAll('.menu-desktop >.item >.item-btn');
 
     menuItems.forEach(btn => {
         btn.addEventListener('click', function (e) {
@@ -203,8 +189,8 @@ document.addEventListener('DOMContentLoaded', function () {
             let submenu = this.nextElementSibling;
 
             // Fecha todos os outros submenus
-            document.querySelectorAll('.menu-desktop .submenu.open').forEach(openSub => {
-                if (openSub !== submenu) {
+            document.querySelectorAll('.menu-desktop.submenu.open').forEach(openSub => {
+                if (openSub!== submenu) {
                     openSub.classList.remove('open');
                     let openBtn = openSub.previousElementSibling;
                     if (openBtn && openBtn.querySelector('.arrow')) {
@@ -218,7 +204,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 submenu.classList.toggle('open');
                 let arrow = this.querySelector('.arrow');
                 if (arrow) {
-                    arrow.innerHTML = submenu.classList.contains('open') ? '▲' : '▼';
+                    arrow.innerHTML = submenu.classList.contains('open')? '▲' : '▼';
                 }
             }
         });
@@ -227,7 +213,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // ============================================================================
     // Sub-submenus - Serviços para Cidadão, Empresa, etc =====
     // ============================================================================
-    const subMenuItems = document.querySelectorAll('.menu-desktop .submenu > .item > .item-btn');
+    const subMenuItems = document.querySelectorAll('.menu-desktop.submenu >.item >.item-btn');
     subMenuItems.forEach(btn => {
         btn.addEventListener('click', function (e) {
             e.preventDefault();
@@ -238,7 +224,7 @@ document.addEventListener('DOMContentLoaded', function () {
             // Fecha outros sub-submenus do mesmo nível
             let parentSubmenu = this.closest('.submenu');
             parentSubmenu.querySelectorAll('.submenu.open').forEach(openSub => {
-                if (openSub !== submenu) {
+                if (openSub!== submenu) {
                     openSub.classList.remove('open');
                     let openBtn = openSub.previousElementSibling;
                     if (openBtn && openBtn.querySelector('.arrow')) {
@@ -252,7 +238,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 submenu.classList.toggle('open');
                 let arrow = this.querySelector('.arrow');
                 if (arrow) {
-                    arrow.innerHTML = submenu.classList.contains('open') ? '▼' : '▶';
+                    arrow.innerHTML = submenu.classList.contains('open')? '▼' : '▶';
                 }
             }
         });
@@ -261,10 +247,10 @@ document.addEventListener('DOMContentLoaded', function () {
     // Fecha menu ao clicar fora
     document.addEventListener('click', function (e) {
         if (!e.target.closest('.menu-desktop')) {
-            document.querySelectorAll('.menu-desktop .submenu.open').forEach(sub => {
+            document.querySelectorAll('.menu-desktop.submenu.open').forEach(sub => {
                 sub.classList.remove('open');
             });
-            document.querySelectorAll('.menu-desktop .arrow').forEach(arrow => {
+            document.querySelectorAll('.menu-desktop.arrow').forEach(arrow => {
                 if (arrow.innerHTML === '▲') arrow.innerHTML = '▼';
                 if (arrow.innerHTML === '▶') arrow.innerHTML = '▶';
             });
@@ -298,7 +284,7 @@ const dots = dotsContainer.querySelectorAll('.dot');
 function updateCardWidth() {
     const card = track.querySelector('.event-card');
     // GAP SÓ NO MOBILE/TABLET < 1024px
-    gap = window.innerWidth < 1024 ? 30 : 0;
+    gap = window.innerWidth < 1024? 30 : 0;
     cardWidth = card.offsetWidth + gap;
 }
 
@@ -390,12 +376,6 @@ window.addEventListener('resize', () => {
 
 
 
-
-
-
-
-
-
 // ============================================================================
 // Card-Post tricar a imagens pequenas =====
 // ============================================================================
@@ -407,4 +387,3 @@ function trocarImagem(thumb, mainId) {
     });
     thumb.classList.add('active');
 }
-
