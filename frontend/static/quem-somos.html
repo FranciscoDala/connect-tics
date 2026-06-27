@@ -126,6 +126,7 @@
 
 
 
+
         <!-------------------------------------------------------------------------
         -----Menu Lateral - só abre no tablet/celular----------- 
         --------------------------------------------------------------------------->
@@ -134,27 +135,28 @@
 
                 <div class="menu-header">
                     <div class="menu-title">MENU</div>
-                    <button class="close-btn" onclick="fecharMenu(event)">×</button>
+                    <button class="close-btn" onclick="fecharMenu(event)"><!------<b>×</b>---></button>
                 </div>
 
                 <div class="menu-body">
 
                     <div class="item">
-                        <button class="item-btn" onclick="toggle(this)">Institucional <span class="arrow">▼</span></button>
+                        <button class="item-btn" onclick="toggle(this)">Institucional <span
+                                class="arrow">▼</span></button>
                         <div class="submenu">
-                            <a href="/">Pagina Incial</a>
-                            <a href="quem-somos">Quem Somos</a>
+                            <a href="/" class="a_link">Pagina Incial</a>
+                            <a href="quem-somos" class="a_link">Quem Somos</a>
                         </div>
                     </div>
 
-                    <div class="item">                        
-                        <button class="item-btn" onclick="toggle(this)"><a href="produtos" class="a_link">Produtos</a> <span class="arrow"style="visibility:hidden">▼</span></button>
+                    <div class="item">
+                        <button class="item-btn" onclick="toggle(this)"><a href="produtos" class="a_link">Produtos</a>
+                            <span class="arrow" style="visibility:hidden">▼</span></button>
                     </div>
 
                     <div class="item">
-                        <button class="item-btn" onclick="toggle(this)">Serviços <span
-                                class="arrow">▼</span></button>
-                        <div class="submenu">                            
+                        <button class="item-btn" onclick="toggle(this)">Serviços <span class="arrow">▼</span></button>
+                        <div class="submenu">
                             <a href="encomendas" class="a_link">Encomendas</a>
                         </div>
                     </div>
@@ -194,7 +196,6 @@
                 </div>
             </div>
         </div>
-
 
 
 
