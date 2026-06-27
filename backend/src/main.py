@@ -144,6 +144,7 @@ async def quem_somos():
 
 @app.post("/login", tags=["Auth"])
 async def login_post(
+    request: Request,  # <-- ADICIONEI ISSO AQUI
     username: str = Form(...), # Pega do form: <input name="username">
     password: str = Form(...), # Pega do form: <input name="password">
     db: Session = Depends(get_db) # Abre conexão com BD
@@ -167,6 +168,7 @@ async def login_post(
     # Devolve 200 + JSON com pra onde ir. O JS vai fazer o redirect
     return JSONResponse(status_code=200, content={"success": True, "redirect": "/admin"})
 
+
 @app.get("/admin", tags=["Admin"])
 async def admin_page(user: str = Depends(get_current_user)):
     """
@@ -174,6 +176,10 @@ async def admin_page(user: str = Depends(get_current_user)):
     Se não tiver logado, ele dá 401 antes de chegar aqui.
     """
     return get_html_file("admin.html")
+
+
+
+
 
 @app.get("/logout", tags=["Auth"])
 async def logout(request: Request):
