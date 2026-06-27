@@ -32,7 +32,7 @@ if not STATIC_DIR.exists():
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     logger.info("🚀 Criando tabelas e seed admin...")
-    Base.metadata.create_all(bind=engine)
+    Base.metadata.create_all(bind=engine, checkfirst=True) # <-- SÓ MUDOU AQUI
     UPLOADS_DIR.mkdir(parents=True, exist_ok=True)
     logger.info(f"📁 PASTA UPLOADS GARANTIDA: {UPLOADS_DIR.resolve()}")
     db = SessionLocal()

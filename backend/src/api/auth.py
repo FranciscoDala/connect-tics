@@ -6,16 +6,22 @@ from database.database import get_db
 from database.models import User
 from core.security import verify_password, create_access_token, get_current_user
 
-router = APIRouter(prefix="/api", tags=["Auth"]) # <-- prefix fica só aqui
+router = APIRouter(tags=["Auth"]) # <-- Sem prefix
 
-@router.post("/login")
-async def login_post(username: str = Form(...), password: str = Form(...), db: Session = Depends(get_db)):
+async def _login_logic(username: str, password: str, db: Session):
     user = db.query(User).filter(User.username == username).first()
     if not user or not verify_password(password, user.hashed_password):
         raise HTTPException(status_code=401, detail="Usuário ou senha inválidos")
-
     access_token = create_access_token(data={"sub": user.username})
     return {"access_token": access_token, "token_type": "bearer", "redirect": "/admin"}
+
+@router.post("/login") # <-- Rota nova: Render / produção
+async def login_post(username: str = Form(...), password: str = Form(...), db: Session = Depends(get_db)):
+    return await _login_logic(username, password, db)
+
+@router.post("/api/login") # <-- Rota antiga: Local
+async def login_post_api(username: str = Form(...), password: str = Form(...), db: Session = Depends(get_db)):
+    return await _login_logic(username, password, db)
 
 @router.post("/logout")
 async def logout():
