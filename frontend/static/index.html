@@ -250,7 +250,6 @@
         </div> -->
 
 
-
         <!-------------------------------------------------------------------------
         -----Cards post----------- 
         --------------------------------------------------------------------------->
@@ -258,91 +257,12 @@
             <div class="carousel-header">
                 <h2></h2>
             </div>
-
             <div class="carousel-wrapper">
                 <div class="carousel-track" id="carouselTrack">
-
-                    <!-- CARD 1 -->
-                    <div class="event-card">
-                        <div class="card-image-wrapper">
-                            <img src="static/assets/img/14.jpg" alt="Festival de Jazz">
-                        </div>
-                        <div class="card-gradient"></div>
-                        <span class="card-badge">Destaque</span>
-                        <div class="card-date">
-                            <span class="day">26</span>
-                            <span class="month">JUN</span>
-                        </div>
-                        <div class="card-content">
-                            <h3>Entrega de buque de dinheiro, dia Inesquecível</h3>
-                            <div class="card-meta">
-                                <span class="tag">Entrega</span>
-                                <span>20:00H</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- CARD 2 -->
-                    <div class="event-card">
-                        <div class="card-image-wrapper">
-                            <img src="static/assets/img/12.jpg" alt="Show Rock">
-                        </div>
-                        <div class="card-gradient"></div>
-                        <div class="card-date">
-                            <span class="day">15</span>
-                            <span class="month">JUL</span>
-                        </div>
-                        <div class="card-content">
-                            <h3>Entrega de buque de dinheiro, dia Inesquecível</h3>
-                            <div class="card-meta">
-                                <span class="tag">Entrega</span>
-                                <span>16:00H</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- CARD 3 -->
-                    <div class="event-card">
-                        <div class="card-image-wrapper">
-                            <img src="static/assets/img/13.jpg" alt="Festival">
-                        </div>
-                        <div class="card-gradient"></div>
-                        <span class="card-badge">Novo</span>
-                        <div class="card-date">
-                            <span class="day">03</span>
-                            <span class="month">AGO</span>
-                        </div>
-                        <div class="card-content">
-                            <h3>Entrega de buque com flor, dia Inesquecível</h3>
-                            <div class="card-meta">
-                                <span class="tag">Entrega</span>
-                                <span>14:00H</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- CARD 4 -->
-                    <div class="event-card">
-                        <div class="card-image-wrapper">
-                            <img src="static/assets/img/11.jpg" alt="Festa">
-                        </div>
-                        <div class="card-gradient"></div>
-                        <div class="card-date">
-                            <span class="day">20</span>
-                            <span class="month">AGO</span>
-                        </div>
-                        <div class="card-content">
-                            <h3>Entrega de buque de flor, dia Inesquecível</h3>
-                            <div class="card-meta">
-                                <span class="tag">Entrega</span>
-                                <span>18:00H</span>
-                            </div>
-                        </div>
-                    </div>
-
+                    <!-- OS CARDS VÃO ENTRAR AQUI VIA JS -->
+                    <div class="loading-text">Carregando posts...</div>
                 </div>
             </div>
-
             <div class="carousel-dots" id="carouselDots"></div>
         </section>
 
@@ -350,10 +270,8 @@
 
 
 
-
-
         <div class="parceiros-fullone">
-            <div class="parceiros-content p-contentOne">
+            <div class="parceiros-content parceiros-contentOne p-contentOne">
                 <div class="parceiros-texto">
                     <p class="tag">NOSSOS SERVIÇOS</p>
                     <h2>Nós acreditamos que o atendimento é o começo de uma parceria grandiosa</h2>
@@ -534,7 +452,7 @@
                 <!-- ESQUERDA: CARD FIXO -->
                 <div class="foto-principal-wrap">
                     <button class="seta seta-esq" onclick="mudarSlide(-1)">‹</button>
-                    <img id="foto-principal" src="static/assets/img/13.jpg" alt="Foto principal">
+                    <img id="foto-principal" src="" alt="Foto principal">
                     <button class="seta seta-dir" onclick="mudarSlide(1)">›</button>
 
                     <div class="miniaturas-bottom">
@@ -569,56 +487,7 @@
             </div>
         </section>
 
-        <script>
-            let fotoAtual = 0, favoritos = new Set(), likes = 29, dislikes = 8, userLike = 0;
-            const pasta = 'static/assets/img/';
-
-            // LISTA TUAS 4 FOTOS AQUI COM O NOME EXATO
-            const fotos = [
-                pasta + '15.jpg',
-                pasta + '16.jpg',
-                pasta + '17.jpg',
-                pasta + '18.jpg',
-                pasta + '19.jpg',
-                pasta + '10.jpg',
-                pasta + '11.jpg'
-            ];
-
-            const mini = document.getElementById('miniaturas');
-            const parecidas = document.getElementById('fotos-parecidas');
-            const principal = document.getElementById('foto-principal');
-            const contador = document.getElementById('contador-fotos');
-            const btnMais = document.querySelector('.mostrar-mais');
-
-            function att() {
-                principal.src = fotos[fotoAtual];
-                contador.textContent = `Foto ${fotoAtual + 1} de ${fotos.length}`;
-                mini.innerHTML = fotos.map((u, i) =>
-                    `<img src="${u}" class="mini${i == fotoAtual ? ' ativa' : ''}" onclick="fotoAtual=${i};att()">`
-                ).join('');
-            }
-
-            // 3 fotos parecidas pegando das próprias fotos
-            parecidas.innerHTML = [0, 1, 2, 3].map(i => `
-                <div class="parecida-item">
-                <img src="${fotos[i]}">
-                <div><strong>Poste ${i + 1}</strong><small>Carregado por User${i + 1}</small></div>
-                </div>
-                `).join('');
-
-            if (btnMais) btnMais.style.display = 'none';
-
-            window.mudarSlide = d => { fotoAtual = (fotoAtual + d + fotos.length) % fotos.length; att(); }
-            window.darLike = () => { userLike == 1 ? likes-- : (userLike == -1 && dislikes--, likes++, userLike = 1); attCont(); }
-            window.darDislike = () => { userLike == -1 ? dislikes-- : (userLike == 1 && likes--, dislikes++, userLike = -1); attCont(); }
-            window.toggleFavorito = () => { favoritos.has(fotoAtual) ? favoritos.delete(fotoAtual) : favoritos.add(fotoAtual); document.getElementById('icone-fav').textContent = favoritos.has(fotoAtual) ? '★' : '☆'; }
-            function attCont() { document.getElementById('count-like').textContent = likes; document.getElementById('count-dislike').textContent = dislikes; }
-
-            att(); attCont();
-        </script>
-
-
-
+    
 
 
 
@@ -727,6 +596,7 @@
     </footer>
 
     <script src="static/assets/js/site.js"></script>
+    <script src="static/assets/js/posts.js"></script> <!-- NOVO JS PRA PUXAR OS POSTS -->
     <script src="static/assets/js/sweetalert2.min.js"></script>
 </body>
 
@@ -800,6 +670,7 @@
         opacity: 0;
         transform: translateY(30px);
         transition: all 0.8s ease;
+        -background-color: #d51007;
 
         /* Quebra a container e ocupa tela toda */
         -width: 100vw;
@@ -846,6 +717,18 @@
         align-items: center;
         gap: 50px;
     }
+
+    .parceiros-contentOne {
+        -max-width: 1200px;
+        margin: 0 !important;
+        -padding: 0 20px;
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        gap: 50px !important;
+    }
+
+
 
     .parceiros-texto {
         flex: 1;
@@ -922,8 +805,8 @@
         -background: #fafafa;
         padding: 50px 0;
         margin: 0;
-        border-radius: 8px;
-        max-width: 1200px;
+        -border-radius: 8px;
+        max-width: 100%;
         margin-left: auto;
         margin-right: auto;
         box-sizing: border-box;
@@ -1205,7 +1088,7 @@
         padding: 50px 0;
         width: 100%;
         overflow-x: hidden;
-        -background-color: #0645ad;
+        -background-color: rgb(241, 171, 226)
     }
 
     /* HEADER: TÍTULO ESQUERDA + BOTÃO DIREITA */
@@ -1267,7 +1150,7 @@
         flex-direction: column;
         align-items: center;
         width: 100%;
-        max-width: 650px;
+        max-width: 800px;
         height: 500px;
         max-height: 90vh;
         overflow: hidden;

@@ -29,24 +29,41 @@ document.getElementById('searchBlock').onclick = (e) => {
 
 
 
+// ============================================================================
+// 1. HELPER API - Manda token e trata 401
+// ============================================================================
+async function apiFetch(url, options = {}) {
+    const token = localStorage.getItem('access_token');
+    const headers = {
+       'Authorization': token? `Bearer ${token}` : '',
+      ...options.headers,
+    };
+    const response = await fetch(url, {...options, headers});
 
-
+    if (response.status === 401) {
+        localStorage.removeItem('access_token');
+        // Se não estiver já no login, manda pra lá
+        if(!window.location.pathname.includes('/index')){
+            window.location.replace('/index?auth=required');
+        }
+        return null; // Para a execução
+    }
+    return response;
+}
 
 // ============================================================================
-// Login Modal =====
+// 2. LOGIN MODAL - Só roda na index.html
 // ============================================================================
-document.addEventListener('DOMContentLoaded', () => {
-
-    // ===== 1. PEGA OS ELEMENTOS =====
+const loginForm = document.getElementById('loginForm');
+if(loginForm) { // Só executa se estiver na página de login
     const modal = document.getElementById('loginModal');
     const btnLogin = document.querySelector('.btn-login');
     const btnClose = document.querySelector('.modal-close');
-    const form = document.getElementById('loginForm');
-    const btnAcessar = document.getElementById('btn-acessar'); // Novo
-    const btnTexto = btnAcessar?.querySelector('.btn-texto'); // Novo
-    const btnSpinner = btnAcessar?.querySelector('.btn-spinner'); // Novo
+    const btnAcessar = document.getElementById('btn-acessar');
+    const btnTexto = btnAcessar?.querySelector('.btn-texto');
+    const btnSpinner = btnAcessar?.querySelector('.btn-spinner');
 
-    function resetarBotao() { // Função nova pra voltar ao normal
+    function resetarBotao() {
         if(btnAcessar) btnAcessar.disabled = false;
         if(btnTexto) btnTexto.style.display = 'inline';
         if(btnSpinner) btnSpinner.style.display = 'none';
@@ -55,58 +72,59 @@ document.addEventListener('DOMContentLoaded', () => {
     function showAlert(icon, title, text) {
         Swal.fire({
             width: '400px', icon: icon, title: title, text: text,
-            confirmButtonColor: icon === 'error' ? '#d33' : '#3085d6',
+            confirmButtonColor: icon === 'error'? '#d33' : '#3085d6',
             background: '#1a1a1a', color: '#fff'
-        }).then(() => {
-            resetarBotao(); // Volta o botão depois que fechar o alert de erro
-        });
+        }).then(() => { resetarBotao(); });
     }
 
-    // ===== 2. ABRIR / FECHAR MODAL =====
-    btnLogin?.addEventListener('click', (e) => {
-        e.preventDefault();
-        resetarBotao(); // Garante que o botão volta ao normal toda vez que abrir
-        modal?.classList.add('active');
-    });
+    btnLogin?.addEventListener('click', (e) => { e.preventDefault(); resetarBotao(); modal?.classList.add('active'); });
     btnClose?.addEventListener('click', () => modal?.classList.remove('active'));
-    modal?.addEventListener('click', (e) => {
-        if (e.target === modal) modal.classList.remove('active');
-    });
+    modal?.addEventListener('click', (e) => { if (e.target === modal) modal.classList.remove('active'); });
 
-    // ===== 3. LOGIN VIA AJAX =====
-    form?.addEventListener('submit', async (e) => {
+    loginForm.addEventListener('submit', async (e) => {
         e.preventDefault(); 
-
-        // 1. ATIVA O SPINNER E TRAVA
-        btnAcessar.disabled = true;
-        btnTexto.style.display = 'none';
-        btnSpinner.style.display = 'block';
+        if (btnAcessar) { btnAcessar.disabled = true; btnTexto.style.display = 'none'; btnSpinner.style.display = 'block'; }
 
         const username = document.getElementById('username')?.value.trim();
         const password = document.getElementById('password')?.value.trim();
+        if (username === '' || password === '') { showAlert('warning', 'Atenção', 'Preencha usuário e senha'); return; }
 
-        if (username === '' || password === '') {
-            showAlert('warning', 'Atenção', 'Preencha usuário e senha');
+        const formData = new FormData(loginForm);
+        try {
+            const response = await fetch('/api/login', { method: 'POST', body: formData }); 
+            const data = await response.json();
+            if (response.ok) {
+                localStorage.setItem('access_token', data.access_token); 
+                modal.classList.remove('active'); 
+                window.location.replace(data.redirect || '/admin'); 
+            } else {
+                showAlert('error', 'Oops...', data.detail);
+            }
+        } catch (error) {
+            showAlert('error', 'Erro', 'Servidor fora do ar');
+        }
+    });
+}
+
+// ============================================================================
+// 3. ADMIN GUARD - Só roda na admin.html
+// ============================================================================
+if (window.location.pathname === '/admin') {
+    document.addEventListener('DOMContentLoaded', async () => {
+        const token = localStorage.getItem('access_token');
+        if (!token) {
+            window.location.replace('/index?auth=required'); 
             return;
         }
 
-        const formData = new FormData(form);
-        try {
-            const response = await fetch('/login', { method: 'POST', body: formData });
-            const data = await response.json();
-
-            if (response.ok) { // 200
-                modal.classList.remove('active'); 
-                window.location.href = data.redirect; // Vai pro /admin
-            } else { // 401
-                showAlert('error', 'Oops...', data.detail); // Fica aberta + Volta botão
-            }
-        } catch (error) {
-            showAlert('error', 'Erro', 'Servidor fora do ar'); // Volta botão
+        const res = await apiFetch('/admin/api/users'); // Testa o token na API
+        if(res && res.ok) {
+            const users = await res.json();
+            console.log("Logado. Users:", users); // <-- Aqui tu renderiza tua tabela
         }
+        // Se deu 401, o apiFetch já te jogou pro login
     });
-});
-
+}
 
 
 
