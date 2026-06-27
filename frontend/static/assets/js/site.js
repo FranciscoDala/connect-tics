@@ -35,41 +35,52 @@ document.getElementById('searchBlock').onclick = (e) => {
 // ============================================================================
 // Login Modal =====
 // ============================================================================
-
 document.addEventListener('DOMContentLoaded', () => {
 
     // ===== 1. PEGA OS ELEMENTOS =====
-    const modal = document.getElementById('loginModal'); // Tua .modal-overlay
-    const btnLogin = document.querySelector('.btn-login'); // Botão "Login" do menu
-    const btnClose = document.querySelector('.modal-close'); // X
+    const modal = document.getElementById('loginModal');
+    const btnLogin = document.querySelector('.btn-login');
+    const btnClose = document.querySelector('.modal-close');
     const form = document.getElementById('loginForm');
+    const btnAcessar = document.getElementById('btn-acessar'); // Novo
+    const btnTexto = btnAcessar?.querySelector('.btn-texto'); // Novo
+    const btnSpinner = btnAcessar?.querySelector('.btn-spinner'); // Novo
+
+    function resetarBotao() { // Função nova pra voltar ao normal
+        if(btnAcessar) btnAcessar.disabled = false;
+        if(btnTexto) btnTexto.style.display = 'inline';
+        if(btnSpinner) btnSpinner.style.display = 'none';
+    }
 
     function showAlert(icon, title, text) {
         Swal.fire({
             width: '400px', icon: icon, title: title, text: text,
             confirmButtonColor: icon === 'error' ? '#d33' : '#3085d6',
             background: '#1a1a1a', color: '#fff'
+        }).then(() => {
+            resetarBotao(); // Volta o botão depois que fechar o alert de erro
         });
     }
 
-    // ===== 2. ABRIR / FECHAR MODAL CUSTOM =====
-    // Abre: só adiciona .active
+    // ===== 2. ABRIR / FECHAR MODAL =====
     btnLogin?.addEventListener('click', (e) => {
-        e.preventDefault(); // Se for <a href="#">
+        e.preventDefault();
+        resetarBotao(); // Garante que o botão volta ao normal toda vez que abrir
         modal?.classList.add('active');
     });
-
-    // Fecha: no X
     btnClose?.addEventListener('click', () => modal?.classList.remove('active'));
-
-    // Fecha: clicando fora
-    modal?.addEventListener('click', (e) => { 
-        if (e.target === modal) modal.classList.remove('active'); 
+    modal?.addEventListener('click', (e) => {
+        if (e.target === modal) modal.classList.remove('active');
     });
 
-    // ===== 3. LOGIN VIA AJAX - SEM RECARREGAR =====
+    // ===== 3. LOGIN VIA AJAX =====
     form?.addEventListener('submit', async (e) => {
-        e.preventDefault(); // TRAVA O RECARREGAMENTO
+        e.preventDefault(); 
+
+        // 1. ATIVA O SPINNER E TRAVA
+        btnAcessar.disabled = true;
+        btnTexto.style.display = 'none';
+        btnSpinner.style.display = 'block';
 
         const username = document.getElementById('username')?.value.trim();
         const password = document.getElementById('password')?.value.trim();
@@ -85,18 +96,16 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await response.json();
 
             if (response.ok) { // 200
-                modal.classList.remove('active'); // Fecha tua modal custom
+                modal.classList.remove('active'); 
                 window.location.href = data.redirect; // Vai pro /admin
             } else { // 401
-                showAlert('error', 'Oops...', data.detail); // Fica aberta + SweetAlert
+                showAlert('error', 'Oops...', data.detail); // Fica aberta + Volta botão
             }
         } catch (error) {
-            showAlert('error', 'Erro', 'Servidor fora do ar');
+            showAlert('error', 'Erro', 'Servidor fora do ar'); // Volta botão
         }
     });
 });
-
-
 
 
 

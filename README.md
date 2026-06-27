@@ -6,8 +6,6 @@
   user - connect-tics-db
   pass - hJWehG3i.uj5qGz
 
-postgresql://postgres:hJWehG3i.uj5qGz@db.szcixxalvjrgdiwandtj.supabase.co:5432/postgres
-
 
 # codigo para criar as pastas do projectos
 
