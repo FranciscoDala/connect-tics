@@ -505,7 +505,7 @@
 
 
 
-// ===================================================================
+        // ===================================================================
         // BLOCO POSTAGENS - V36 FINAL: UPLOAD 1 POR 1 PRA EVITAR 422
         // ===================================================================
         (function PostModule() {
@@ -544,9 +544,9 @@
                     return;
                 }
                 _p.tableBody.innerHTML = _p.cache.map(p => {
-                    const imgSrc = p.cover_image || (p.images && p.images[0]? p.images[0].image_url : '') || 'https://placehold.co/40x40/111113/888?text=+';
-                    const tagNovo = _p.isNew(p.created_at)? '<span style="font-size: 11px; padding: 3px 8px; border-radius: 999px; font-weight: 700; margin-left: 6px; background: #22C55E; color: #000;">NOVO</span>' : '';
-                    const tagFire = p.is_highlighted? '<span style="font-size: 11px; padding: 3px 8px; border-radius: 999px; font-weight: 700; margin-left: 6px; background: var(--accent); color: #000;">🔥</span>' : '';
+                    const imgSrc = p.cover_image || (p.images && p.images[0] ? p.images[0].image_url : '') || 'https://placehold.co/40x40/111113/888?text=+';
+                    const tagNovo = _p.isNew(p.created_at) ? '<span style="font-size: 11px; padding: 3px 8px; border-radius: 999px; font-weight: 700; margin-left: 6px; background: #22C55E; color: #000;">NOVO</span>' : '';
+                    const tagFire = p.is_highlighted ? '<span style="font-size: 11px; padding: 3px 8px; border-radius: 999px; font-weight: 700; margin-left: 6px; background: var(--accent); color: #000;">🔥</span>' : '';
                     return `
             <tr>
                 <td>${p.id}</td>
@@ -555,7 +555,7 @@
                     ${escapeHtml(p.title)} ${tagFire} ${tagNovo}
                 </td>
                 <td>${escapeHtml(p.category_name || '')}</td>
-                <td>${p.type === 'fotos'? 'Fotos' : 'Normal'}</td>
+                <td>${p.type === 'fotos' ? 'Fotos' : 'Normal'}</td>
                 <td>${new Date(p.created_at).toLocaleDateString('pt-AO')}</td>
                 <td class="actions">
                     <button class="btn btn-outline" data-edit-post="${p.id}">Editar</button>
@@ -567,8 +567,8 @@
 
             _p.toggleFields = () => {
                 const type = document.getElementById('postType').value;
-                document.getElementById('fieldsNormal').style.display = type === 'fotos'? 'none' : 'block';
-                document.getElementById('fieldsFotos').style.display = type === 'normal'? 'none' : 'block';
+                document.getElementById('fieldsNormal').style.display = type === 'fotos' ? 'none' : 'block';
+                document.getElementById('fieldsFotos').style.display = type === 'normal' ? 'none' : 'block';
             };
 
             _p.createImageRow = (existingUrl = null) => {
@@ -628,17 +628,17 @@
                     wrap.appendChild(_p.createImageRow());
                 }
 
-                document.getElementById('postId').value = post? post.id : '';
-                document.getElementById('postCategory').value = post? post.category_id : '';
-                document.getElementById('postTitle').value = post? post.title : '';
-                document.getElementById('postType').value = post? post.type : 'normal';
-                document.getElementById('postContent').value = post? post.content : '';
-                document.getElementById('postPrice').value = post? post.price : '';
-                document.getElementById('postLink').value = post? post.link : '';
-                document.getElementById('postHighlight').checked = post? post.is_highlighted : false;
+                document.getElementById('postId').value = post ? post.id : '';
+                document.getElementById('postCategory').value = post ? post.category_id : '';
+                document.getElementById('postTitle').value = post ? post.title : '';
+                document.getElementById('postType').value = post ? post.type : 'normal';
+                document.getElementById('postContent').value = post ? post.content : '';
+                document.getElementById('postPrice').value = post ? post.price : '';
+                document.getElementById('postLink').value = post ? post.link : '';
+                document.getElementById('postHighlight').checked = post ? post.is_highlighted : false;
 
                 _p.toggleFields();
-                document.getElementById('postModalTitle').textContent = post? 'Editar Postagem' : 'Nova Postagem';
+                document.getElementById('postModalTitle').textContent = post ? 'Editar Postagem' : 'Nova Postagem';
                 _p.modal.classList.add('active');
             };
 
@@ -661,15 +661,20 @@
                 }
             };
 
-            // CORRIGIDO V36: AGORA SALVA EM 2 PASSOS
             document.getElementById('btnSavePost').onclick = async () => {
                 const btn = document.getElementById('btnSavePost');
                 const id = document.getElementById('postId').value;
                 const type = document.getElementById('postType').value;
-                const fd = new FormData();
+                const category_id = document.getElementById('postCategory').value; // <-- PEGUEI AQUI
+                const title = document.getElementById('postTitle').value.trim();
 
-                fd.append('category_id', document.getElementById('postCategory').value);
-                fd.append('title', document.getElementById('postTitle').value.trim());
+                // FIX V36.2: VALIDAÇÃO PRA NÃO MANDAR "" PRO RENDER
+                if (!category_id) return showAlert('Erro', 'Selecione uma Categoria', 'error');
+                if (!title) return showAlert('Erro', 'Preencha o Título', 'error');
+
+                const fd = new FormData();
+                fd.append('category_id', category_id);
+                fd.append('title', title);
                 fd.append('type', type);
                 fd.append('is_highlighted', document.getElementById('postHighlight').checked);
 
@@ -682,7 +687,7 @@
                     const cover = document.getElementById('postCover').files[0];
                     if (cover) fd.append('cover_image', cover);
                 } else {
-                    fd.append('content', ''); // Evita null no backend
+                    fd.append('content', '');
                     fd.append('price', '');
                 }
 
@@ -690,45 +695,35 @@
                     const existing = [...document.querySelectorAll('#postImagesWrap input[name="existing_images"]')].map(i => i.value);
                     existing.forEach(url => fd.append('existing_images', url));
                     const files = [...document.querySelectorAll('#postImagesWrap input[type="file"]')].map(i => i.files[0]).filter(Boolean);
-                    if (files.length === 0 && existing.length === 0 &&!id) return showAlert('Erro', 'Selecione ao menos 1 foto', 'error');
+                    if (files.length === 0 && existing.length === 0 && !id) return showAlert('Erro', 'Selecione ao menos 1 foto', 'error');
                 }
-
-                if (!fd.get('category_id') ||!fd.get('title')) return showAlert('Erro', 'Preencha Categoria e Título', 'error');
 
                 btn.disabled = true; btn.textContent = 'Salvando...';
                 try {
-                    const url = id? `${API}/posts/${id}` : `${API}/posts`;
-                    // PASSO 1: Cria o post e pega o ID de volta
-                    const postData = await apiFetch(url, { method: id? 'PUT' : 'POST', body: fd });
+                    const url = id ? `${API}/posts/${id}` : `${API}/posts`;
+                    const postData = await apiFetch(url, { method: id ? 'PUT' : 'POST', body: fd });
 
-                    // PASSO 2: Se for fotos, sobe 1 por 1
                     if (type === 'fotos') {
                         const files = [...document.querySelectorAll('#postImagesWrap input[type="file"]')].map(i => i.files[0]).filter(Boolean);
                         for (const f of files) {
                             const imgFd = new FormData();
-                            imgFd.append('file', f); // Backend espera `file`
+                            imgFd.append('file', f);
                             await apiFetch(`${API}/posts/${postData.id}/images`, { method: 'POST', body: imgFd });
                         }
                     }
 
-                    showAlert('Sucesso', id? 'Post atualizado' : 'Post criado', 'success');
-                    _p.fecharModal();
-                    _p.carregar();
+                    showAlert('Sucesso', id ? 'Post atualizado' : 'Post criado', 'success');
+                    _p.fecharModal(); _p.carregar();
 
                 } catch (e) {
                     let errorMsg = 'Erro ao salvar';
-                    if (e.detail && Array.isArray(e.detail)) {
-                        errorMsg = e.detail.map(err => `${err.loc[1]}: ${err.msg}`).join('\n');
-                    } else if (e.detail) {
-                        errorMsg = e.detail;
-                    } else if (e.message) {
-                        errorMsg = e.message;
-                    }
+                    if (e.message) { errorMsg = e.message; } // Pega o 422 direto
                     showAlert('Erro', errorMsg, 'error');
                 }
                 finally { btn.disabled = false; btn.textContent = 'Salvar'; }
             };
 
+            
             _p.tableBody.onclick = async (e) => {
                 const editId = e.target.dataset.editPost;
                 const delId = e.target.dataset.delPost;
@@ -759,7 +754,7 @@
         // ===================================================================
         // FIM BLOCO POSTAGENS
         // ===================================================================
-    
+
     </script>
 
 
