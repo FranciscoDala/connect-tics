@@ -14,14 +14,14 @@ from schemas.posts import PostOut, PostType
 router = APIRouter(prefix="/posts", tags=["posts"])
 logger = logging.getLogger(__name__)
 # ===================================================================
-# CORRIGIDO V33: 3x .parent PRA CHEGAR NA RAIZ DO PROJETO
+# CORRIGIDO V33: 3x.parent PRA CHEGAR NA RAIZ DO PROJETO
 # ===================================================================
-ROUTERS_DIR = Path(__file__).resolve().parent          # /src/backend/src/routers
-SRC_DIR = ROUTERS_DIR.parent                           # /src/backend/src
-BACKEND_DIR = SRC_DIR.parent                           # /src/backend
-PROJECT_ROOT = BACKEND_DIR.parent                      # /src  <-- RAIZ AQUI
+ROUTERS_DIR = Path(__file__).resolve().parent # /src/backend/src/routers
+SRC_DIR = ROUTERS_DIR.parent # /src/backend/src
+BACKEND_DIR = SRC_DIR.parent # /src/backend
+PROJECT_ROOT = BACKEND_DIR.parent # /src <-- RAIZ AQUI
 
-STATIC_DIR = PROJECT_ROOT / "frontend" / "static"      # /src/frontend/static
+STATIC_DIR = PROJECT_ROOT / "frontend" / "static" # /src/frontend/static
 UPLOAD_DIR = STATIC_DIR / "assets" / "img" / "uploads" # /src/frontend/static/assets/img/uploads
 UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
 BASE_URL_PATH = "/static/assets/img/uploads" # URL que o browser usa
@@ -77,16 +77,16 @@ def _sync_images(db: Session, post: PostModel, files: list[UploadFile]):
 def read_posts(limit: int = 100, skip: int = 0, db: Session = Depends(get_db)):
     stmt = (
         select(PostModel)
-      .options(joinedload(PostModel.images), joinedload(PostModel.category))
-      .order_by(PostModel.created_at.desc())
-      .offset(skip)
-      .limit(limit)
+     .options(joinedload(PostModel.images), joinedload(PostModel.category))
+     .order_by(PostModel.created_at.desc())
+     .offset(skip)
+     .limit(limit)
     )
     posts = db.execute(stmt).unique().scalars().all()
     return [_build_post_out(p, p.category.name if p.category else "") for p in posts]
 @router.post("", response_model=PostOut, status_code=status.HTTP_201_CREATED)
 async def create_post(
-    category_id: int = Form(...),
+    category_id: int | None = Form(None), # <-- CORRIGIDO V34: Aceita vazio pra não dar 422
     title: str = Form(...),
     type: PostType = Form(...),
     is_highlighted: bool = Form(False),
@@ -94,9 +94,10 @@ async def create_post(
     price: float | None = Form(None),
     link: str | None = Form(None),
     cover_image: UploadFile | None = File(None),
-    images: list[UploadFile] | None = File(None),
+    images: list[UploadFile] = File([]), # <-- CORRIGIDO V34: [] em vez de None. Aceita multi vazio
     db: Session = Depends(get_db)
 ):
+    if not category_id: raise HTTPException(status_code=400, detail="category_id obrigatório") # <-- Validação manual
     category = db.get(CategoryModel, category_id)
     if not category: raise HTTPException(status_code=404, detail=f"Category {category_id} not found")
 
@@ -142,7 +143,7 @@ async def update_post(
     price: float | None = Form(None),
     link: str | None = Form(None),
     cover_image: UploadFile | None = File(None),
-    images: list[UploadFile] | None = File(None),
+    images: list[UploadFile] = File([]), # <-- CORRIGIDO V34: [] em vez de None
     existing_images: list[str] = Form([]),
     db: Session = Depends(get_db)
 ):

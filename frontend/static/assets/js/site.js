@@ -28,9 +28,8 @@ document.getElementById('searchBlock').onclick = (e) => {
 }
 
 
-
 // ============================================================================
-// 1. HELPER API - Manda token e trata 401
+// 1. HELPER API - Manda token e trata 401 + 422
 // ============================================================================
 async function apiFetch(url, options = {}) {
     const token = localStorage.getItem('access_token');
@@ -42,14 +41,21 @@ async function apiFetch(url, options = {}) {
 
     if (response.status === 401) {
         localStorage.removeItem('access_token');
-        // Se não estiver já na raiz, manda pra lá. Corrigido: era /index
         if(!window.location.pathname.includes('/')){
             window.location.replace('/?auth=required');
         }
         return null; // Para a execução
     }
-    return response;
+
+    const data = await response.json(); // <-- LÊ O JSON AQUI SEMPRE
+
+    if (!response.ok) {
+        throw data; // <-- Joga o {detail: ...} pro catch
+    }
+    
+    return data; // <-- Sempre retorna o json
 }
+
 
 // ============================================================================
 // 2. LOGIN MODAL - Só roda na index.html
